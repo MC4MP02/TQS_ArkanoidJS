@@ -1,4 +1,5 @@
 import { Ball } from "../../src/model/Ball";
+import { Paddle } from "../../src/model/Paddle";
 import { GameView } from "../../src/view/GameView";
 
 /* jest.mock("../../src/view/GameView.ts"); */
@@ -11,6 +12,11 @@ describe("GameView", () => {
   let mockWidth = 448;
   let mockHeight = 400;
 
+  let paddleWidth = 50;
+  let paddleHeight = 10;
+  let paddleX = (mockWidth - paddleWidth) / 2;
+  let paddleY = mockHeight - paddleHeight - 20;
+
   beforeEach(() => {
     mockCanvas = document.createElement("canvas");
     mockCtx = {
@@ -20,6 +26,7 @@ describe("GameView", () => {
       fill: jest.fn(),
       closePath: jest.fn(),
       clearRect: jest.fn(),
+      drawImage: jest.fn(),
     } as unknown as CanvasRenderingContext2D;
 
     gameView = new GameView(mockCanvas, mockCtx);
@@ -46,6 +53,25 @@ describe("GameView", () => {
     expect(mockCtx.arc).toHaveBeenCalledWith(50, 50, 10, 0, Math.PI * 2);
     expect(mockCtx.fill).toHaveBeenCalled();
     expect(mockCtx.closePath).toHaveBeenCalled();
+  });
+
+  it("debería dibujar el paddle en el canvas", () => {
+    gameView.loadCanvas();
+
+    const paddle = new Paddle(paddleWidth, paddleHeight, paddleX, paddleY);
+
+    expect(mockCtx.drawImage).toHaveBeenCalled();
+    expect(mockCtx.drawImage).toHaveBeenCalledWith(
+      expect.any(Element),
+      29,
+      174,
+      paddle.paddleWidth,
+      paddle.paddleHeight,
+      paddle.paddleX,
+      paddle.paddleY,
+      paddle.paddleWidth,
+      paddle.paddleHeight
+    );
   });
 
   it("debería limpiar el canvas", () => {

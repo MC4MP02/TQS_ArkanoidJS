@@ -16,5 +16,11 @@ export class GameView {
     this.canvas.height = this.canvasHeight;
   }
 
-  drawBall(ball: Ball) {}
+  drawBall(ball: Ball) {
+    this.ctx.beginPath();
+    this.ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+    this.ctx.fillStyle = "#fff";
+    this.ctx.fill();
+    this.ctx.closePath();
+  }
 }

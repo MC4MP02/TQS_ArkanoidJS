@@ -1,16 +1,15 @@
 import { Ball } from "../../src/model/Ball";
 import { GameView } from "../../src/view/GameView";
 
-jest.mock("../../src/view/GameView.ts");
+/* jest.mock("../../src/view/GameView.ts"); */
 
 describe("GameView", () => {
   let mockCanvas: HTMLCanvasElement;
   let mockCtx: CanvasRenderingContext2D;
   let gameView: GameView;
 
-  // Valores por defecto para el mock del canvas
-  let mockWidth = 300;
-  let mockHeight = 150;
+  let mockWidth = 448;
+  let mockHeight = 400;
 
   beforeEach(() => {
     mockCanvas = document.createElement("canvas");

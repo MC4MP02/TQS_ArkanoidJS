@@ -30,6 +30,9 @@ describe("GameView", () => {
     } as unknown as CanvasRenderingContext2D;
 
     gameView = new GameView(mockCanvas, mockCtx);
+
+    const mockImage = new Image();
+    gameView["sprite"] = mockImage;
   });
 
   it("debería crear una instancia de GameView", () => {
@@ -60,9 +63,11 @@ describe("GameView", () => {
 
     const paddle = new Paddle(paddleWidth, paddleHeight, paddleX, paddleY);
 
+    gameView.drawPaddle(paddle);
+
     expect(mockCtx.drawImage).toHaveBeenCalled();
     expect(mockCtx.drawImage).toHaveBeenCalledWith(
-      expect.any(Element),
+      expect.any(HTMLImageElement),
       29,
       174,
       paddle.paddleWidth,

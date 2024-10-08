@@ -1,7 +1,12 @@
 import { Ball } from "../model/Ball";
+import { Paddle } from "../model/Paddle";
 export class GameView {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
+
+  private sprite: HTMLImageElement = document.querySelector(
+    "#sprite"
+  ) as HTMLImageElement;
 
   private canvasWidth: number = 448;
   private canvasHeight: number = 400;
@@ -22,6 +27,20 @@ export class GameView {
     this.ctx.fillStyle = "#fff";
     this.ctx.fill();
     this.ctx.closePath();
+  }
+
+  drawPaddle(paddle: Paddle) {
+    this.ctx.drawImage(
+      this.sprite,
+      29,
+      174,
+      paddle.paddleWidth,
+      paddle.paddleHeight,
+      paddle.paddleX,
+      paddle.paddleY,
+      paddle.paddleWidth,
+      paddle.paddleHeight
+    );
   }
 
   clearCanvas() {

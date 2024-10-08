@@ -47,4 +47,11 @@ describe("GameView", () => {
     expect(mockCtx.fill).toHaveBeenCalled();
     expect(mockCtx.closePath).toHaveBeenCalled();
   });
+
+  it("debería limpiar el canvas", () => {
+    gameView.clearCanvas();
+
+    expect(mockCtx.clearRect).toHaveBeenCalled();
+    expect(mockCtx.clearRect).toHaveBeenCalledWith(0, 0, mockWidth, mockHeight);
+  });
 });

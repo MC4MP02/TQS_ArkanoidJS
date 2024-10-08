@@ -23,4 +23,6 @@ export class GameView {
     this.ctx.fill();
     this.ctx.closePath();
   }
+
+  clearCanvas() {}
 }

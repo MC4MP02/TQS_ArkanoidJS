@@ -14,6 +14,15 @@ export class GameView {
   constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
     this.canvas = canvas;
     this.ctx = ctx;
+    this.sprite.src = "./assets/sprite.png";
+
+    /*this.sprite.onload = () => {
+      this.loadCanvas();
+
+      this.drawBall(new Ball(50, 50, 10, 2, 2));
+      const paddle = new Paddle(50, 10, (448 - 50) / 2, 400 - 10 - 20);
+      this.drawPaddle(paddle);
+    };*/
   }
 
   loadCanvas() {
@@ -24,7 +33,7 @@ export class GameView {
   drawBall(ball: Ball) {
     this.ctx.beginPath();
     this.ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-    this.ctx.fillStyle = "#fff";
+    this.ctx.fillStyle = "#000";
     this.ctx.fill();
     this.ctx.closePath();
   }

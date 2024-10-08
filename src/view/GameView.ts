@@ -1,3 +1,4 @@
+import { Ball } from "../model/Ball";
 export class GameView {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
@@ -14,4 +15,6 @@ export class GameView {
     this.canvas.width = this.canvasWidth;
     this.canvas.height = this.canvasHeight;
   }
+
+  drawBall(ball: Ball) {}
 }

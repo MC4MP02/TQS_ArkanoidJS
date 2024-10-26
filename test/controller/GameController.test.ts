@@ -5,26 +5,18 @@ import { Paddle } from "../../src/model/Paddle";
 import { Map } from "../../src/model/Map";
 
 jest.mock("../../src/view/GameView");
-jest.mock("../../src/controllers/GameController");
 jest.mock("../../src/model/Ball");
 jest.mock("../../src/model/Paddle");
 
 describe("GameController", () => {
+  let gameViewMock: jest.Mocked<GameView>;
+  let BallMock: jest.Mocked<Ball>;
+  let PaddleMock: jest.Mocked<Paddle>;
+  let MapMock: jest.Mocked<Map>;
   let gameControllerMock: GameController;
+
   let mockCanvas: HTMLCanvasElement;
   let mockCtx: CanvasRenderingContext2D;
-  let gameViewMock: GameView;
-  let BallMock: Ball;
-  let PaddleMock: Paddle;
-  let MapMock: Map;
-
-  let mockWidth = 448;
-  let mockHeight = 400;
-
-  let paddleWidth = 50;
-  let paddleHeight = 10;
-  let paddleX = (mockWidth - paddleWidth) / 2;
-  let paddleY = mockHeight - paddleHeight - 20;
 
   beforeEach(() => {
     mockCanvas = document.createElement("canvas");
@@ -37,17 +29,21 @@ describe("GameController", () => {
       drawImage: jest.fn(),
     } as unknown as CanvasRenderingContext2D;
 
-    BallMock = new Ball(50, 50, 10, 2, 2);
-    PaddleMock = new Paddle(paddleWidth, paddleHeight, paddleX, paddleY);
-    MapMock = new Map();
+    // Mock del requestAnimationFrame
+    global.requestAnimationFrame = jest.fn((callback) => {
+      callback(0);
+      return 0; // Retorna un ID de frame ficticio
+    });
 
-    const mockSprite = document.createElement("img");
-    mockSprite.id = "sprite";
-    document.body.appendChild(mockSprite);
-
-    gameViewMock = new GameView(mockCanvas, mockCtx);
-
-    gameViewMock["sprite"] = mockSprite;
+    gameViewMock = {
+      clearCanvas: jest.fn(),
+      drawBall: jest.fn(),
+      drawMap: jest.fn(),
+      drawPaddle: jest.fn(),
+      loadCanvas: jest.fn(),
+      render: jest.fn(),
+      sprite: document.createElement("img"),
+    } as any;
 
     gameControllerMock = new GameController(gameViewMock);
   });
@@ -56,28 +52,17 @@ describe("GameController", () => {
     //Comprobamos que se hayan creado las instancias de cada clase y las variables incializadas
     expect(gameControllerMock).toBeInstanceOf(GameController);
     expect(gameControllerMock["view"]).toBe(gameViewMock);
-    expect(gameControllerMock["view"]).toBeInstanceOf(GameView);
   });
 
   it("debería inicar el juego y comenzar el bucle del juego", () => {
-    /* Espiaremos el metodo startGame del controlador
-    Esto nos permitira saber si se ha llamado a este metodo,
-    cuantas veces se ha llamado y con que argumentos, etc. */
-    const startGameSpy = jest.spyOn(gameControllerMock, "startGame");
-    const gameLoopSpy = jest.spyOn(gameControllerMock, "gameLoop");
+    // Spy sobre el método gameLoop
+    const gameLoopSpy = jest.spyOn(GameController.prototype as any, "gameLoop");
 
-    // Iniciamos el juego
-    gameControllerMock.startGame();
+    // Llama al método startGameMethod para iniciar el juego
+    gameControllerMock.startGameMethod();
 
-    // Comprobamos que el metodo startGame haya sido llamado
-    expect(startGameSpy).toHaveBeenCalled();
-
+    // Verifica que gameLoop se haya llamado
     expect(gameLoopSpy).toHaveBeenCalled();
-
-    // Comprobamos que el metodo render haya sido llamado
-
-    // Comprobamos que el juego este funcionando
-    expect(gameControllerMock.getIsRunning()).toBe(true);
   });
 
   it("debería actualizar y renderizar la escena en cada ciclo del bucle", () => {

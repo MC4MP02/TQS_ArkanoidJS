@@ -13,5 +13,5 @@ const gameController = new GameController(view);
 view.loadCanvas();
 
 window.onload = () => {
-  gameController.startGame();
+  gameController.startGameMethod();
 };

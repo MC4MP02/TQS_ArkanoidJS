@@ -11,7 +11,7 @@ export class GameController {
     this.view = view;
   }
 
-  public startGame() {
+  public startGameMethod() {
     this.isRunning = true;
   }
 

@@ -1,5 +1,7 @@
 import { Ball } from "../model/Ball";
 import { Paddle } from "../model/Paddle";
+import { Brick } from "../model/Brick";
+import { Map } from "../model/Map";
 export class GameView {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
@@ -30,7 +32,9 @@ export class GameView {
     this.canvas.height = this.canvasHeight;
   }
 
-  drawBall(ball: Ball) {
+  render(ball: Ball, paddle: Paddle, map: Map): void {}
+
+  private drawBall(ball: Ball) {
     this.ctx.beginPath();
     this.ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
     this.ctx.fillStyle = "#000";
@@ -38,7 +42,7 @@ export class GameView {
     this.ctx.closePath();
   }
 
-  drawPaddle(paddle: Paddle) {
+  private drawPaddle(paddle: Paddle) {
     this.ctx.drawImage(
       this.sprite,
       29,
@@ -51,6 +55,8 @@ export class GameView {
       paddle.paddleHeight
     );
   }
+
+  private drawMap(map: Map) {}
 
   clearCanvas() {
     this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);

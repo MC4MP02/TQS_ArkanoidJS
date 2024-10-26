@@ -1,6 +1,8 @@
 import { Ball } from "../../src/model/Ball";
 import { Paddle } from "../../src/model/Paddle";
 import { GameView } from "../../src/view/GameView";
+import { Map } from "../../src/model/Map";
+import { Brick } from "../../src/model/Brick";
 
 /* jest.mock("../../src/view/GameView.ts"); */
 
@@ -20,7 +22,6 @@ describe("GameView", () => {
   beforeEach(() => {
     mockCanvas = document.createElement("canvas");
     mockCtx = {
-      // Simulamos los metodos de mockCtx (estos no haran nada)
       beginPath: jest.fn(),
       arc: jest.fn(),
       fill: jest.fn(),
@@ -29,10 +30,13 @@ describe("GameView", () => {
       drawImage: jest.fn(),
     } as unknown as CanvasRenderingContext2D;
 
+    const mockSprite = document.createElement("img");
+    mockSprite.id = "sprite";
+    document.body.appendChild(mockSprite);
+
     gameView = new GameView(mockCanvas, mockCtx);
 
-    const mockImage = new Image();
-    gameView["sprite"] = mockImage;
+    gameView["sprite"] = mockSprite;
   });
 
   it("debería crear una instancia de GameView", () => {
@@ -50,7 +54,7 @@ describe("GameView", () => {
 
     const ball = new Ball(50, 50, 10, 2, 2);
 
-    gameView.drawBall(ball);
+    gameView["drawBall"](ball);
 
     expect(mockCtx.beginPath).toHaveBeenCalled();
     expect(mockCtx.arc).toHaveBeenCalledWith(50, 50, 10, 0, Math.PI * 2);
@@ -63,7 +67,7 @@ describe("GameView", () => {
 
     const paddle = new Paddle(paddleWidth, paddleHeight, paddleX, paddleY);
 
-    gameView.drawPaddle(paddle);
+    gameView["drawPaddle"](paddle);
 
     expect(mockCtx.drawImage).toHaveBeenCalled();
     expect(mockCtx.drawImage).toHaveBeenCalledWith(
@@ -84,5 +88,98 @@ describe("GameView", () => {
 
     expect(mockCtx.clearRect).toHaveBeenCalled();
     expect(mockCtx.clearRect).toHaveBeenCalledWith(0, 0, mockWidth, mockHeight);
+  });
+});
+
+describe("GameView.drawMap() con mock del Map", () => {
+  let canvas: HTMLCanvasElement;
+  let ctx: CanvasRenderingContext2D;
+  let gameView: GameView;
+
+  //Partial es para crear un mock con solo algunos objetos o variables
+  let mockMap: Partial<Map>;
+
+  beforeEach(() => {
+    canvas = document.createElement("canvas");
+    ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    gameView = new GameView(canvas, ctx);
+
+    // Mock del contexto de dibujo
+    jest.spyOn(ctx, "drawImage").mockImplementation(jest.fn());
+    jest.spyOn(ctx, "clearRect").mockImplementation(jest.fn());
+
+    mockMap = {
+      getBricks: jest.fn(),
+      getBrickColumnCount: jest.fn(),
+      getBrickRowCount: jest.fn(),
+      getBrickWidth: jest.fn(),
+      getBrickHeigth: jest.fn(),
+    };
+
+    // Configuramos valores por defecto para el mock de Map
+    (mockMap.getBrickWidth as jest.Mock).mockReturnValue(32);
+    (mockMap.getBrickHeigth as jest.Mock).mockReturnValue(16);
+    (mockMap.getBrickColumnCount as jest.Mock).mockReturnValue(3);
+    (mockMap.getBrickRowCount as jest.Mock).mockReturnValue(2);
+
+    const brickAlive = new Brick(0, 0, 1, 0); // Ladrillo vivo
+    const brickDead = new Brick(0, 0, 0, 0); // Ladrillo muerto
+    (mockMap.getBricks as jest.Mock).mockReturnValue([
+      [brickAlive, brickDead],
+      [brickAlive, brickAlive],
+      [brickDead, brickAlive],
+    ]);
+  });
+
+  it("debería dibujar solo los ladrillos con estado ALIVE", () => {
+    gameView["drawMap"](mockMap as Map);
+
+    // Comprobamos llamadas a drawImage solo para ladrillos ALIVE
+    expect(ctx.drawImage).toHaveBeenCalledTimes(4); // Solo ladrillos vivos en el mock
+    expect(ctx.drawImage).toHaveBeenCalledWith(
+      expect.anything(), // Seria el sprite
+      0, // Color
+      0,
+      32, // Ancho del ladrillo
+      16, // Alto del ladrillo
+      expect.any(Number), // X
+      expect.any(Number), // Y
+      32,
+      16
+    );
+  });
+
+  it("no debería dibujar ladrillos con estado DEAD", () => {
+    gameView["drawMap"](mockMap as Map);
+
+    const bricks = (mockMap.getBricks as jest.Mock).mock.results[0].value;
+    bricks.forEach((col: Brick[], colIndex: number) => {
+      col.forEach((brick: Brick, rowIndex: number) => {
+        if (brick.status === 0) {
+          // Verifica que drawImage no fue llamado para ladrillos DEAD
+          expect(ctx.drawImage).not.toHaveBeenCalledWith(
+            expect.anything(),
+            brick.color * 32,
+            0,
+            32,
+            16,
+            brick.BrickX,
+            brick.BrickY,
+            32,
+            16
+          );
+        }
+      });
+    });
+  });
+
+  it("debería manejar un array vacio de ladrillos correctamente", () => {
+    // Configuramos el mock para devolver un array vacio
+    (mockMap.getBricks as jest.Mock).mockReturnValue([]);
+
+    gameView["drawMap"](mockMap as Map);
+
+    // Verificamos que no se llamó a drawImage
+    expect(ctx.drawImage).not.toHaveBeenCalled();
   });
 });

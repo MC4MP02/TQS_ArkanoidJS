@@ -13,6 +13,7 @@ export class GameController {
 
   public startGameMethod() {
     this.isRunning = true;
+    this.gameLoop();
   }
 
   public gameLoop() {}

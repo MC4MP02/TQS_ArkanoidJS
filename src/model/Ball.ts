@@ -19,7 +19,13 @@ export class Ball {
     this.speedY = speedY;
   }
 
-  changeX() {}
+  changeX() {
+    this.speedX = -this.speedX;
+    this.x += this.speedX;
+  }
 
-  changeY() {}
+  changeY() {
+    this.speedY = -this.speedY;
+    this.y += this.speedY;
+  }
 }

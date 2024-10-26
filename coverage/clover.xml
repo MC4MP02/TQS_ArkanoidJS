@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1729944890260" clover="3.2.0">
-  <project timestamp="1729944890260" name="All files">
-    <metrics statements="54" coveredstatements="45" conditionals="0" coveredconditionals="0" methods="21" coveredmethods="10" elements="75" coveredelements="55" complexity="0" loc="54" ncloc="54" packages="3" files="6" classes="6"/>
+<coverage generated="1729945807617" clover="3.2.0">
+  <project timestamp="1729945807617" name="All files">
+    <metrics statements="64" coveredstatements="55" conditionals="1" coveredconditionals="1" methods="21" coveredmethods="10" elements="86" coveredelements="66" complexity="0" loc="64" ncloc="64" packages="3" files="6" classes="6"/>
     <package name="controllers">
       <metrics statements="5" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
       <file name="GameController.ts" path="/root/TQS_ArkanoidJS/src/controllers/GameController.ts">
@@ -62,25 +62,35 @@
       </file>
     </package>
     <package name="view">
-      <metrics statements="16" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="6"/>
+      <metrics statements="26" coveredstatements="26" conditionals="1" coveredconditionals="1" methods="7" coveredmethods="6"/>
       <file name="GameView.ts" path="/root/TQS_ArkanoidJS/src/view/GameView.ts">
-        <metrics statements="16" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="6"/>
+        <metrics statements="26" coveredstatements="26" conditionals="1" coveredconditionals="1" methods="7" coveredmethods="6"/>
         <line num="5" count="3" type="stmt"/>
         <line num="9" count="8" type="stmt"/>
         <line num="13" count="8" type="stmt"/>
-        <line num="14" count="8" type="stmt"/>
         <line num="17" count="8" type="stmt"/>
         <line num="18" count="8" type="stmt"/>
-        <line num="19" count="8" type="stmt"/>
-        <line num="31" count="3" type="stmt"/>
-        <line num="32" count="3" type="stmt"/>
-        <line num="38" count="1" type="stmt"/>
-        <line num="39" count="1" type="stmt"/>
+        <line num="20" count="8" type="stmt"/>
+        <line num="26" count="8" type="stmt"/>
+        <line num="27" count="8" type="stmt"/>
+        <line num="28" count="8" type="stmt"/>
+        <line num="33" count="3" type="stmt"/>
+        <line num="34" count="3" type="stmt"/>
         <line num="40" count="1" type="stmt"/>
         <line num="41" count="1" type="stmt"/>
         <line num="42" count="1" type="stmt"/>
-        <line num="46" count="1" type="stmt"/>
-        <line num="62" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="62" count="3" type="stmt"/>
+        <line num="63" count="3" type="stmt"/>
+        <line num="64" count="3" type="stmt"/>
+        <line num="66" count="3" type="stmt"/>
+        <line num="67" count="7" type="stmt"/>
+        <line num="68" count="13" type="stmt"/>
+        <line num="69" count="12" type="cond" truecount="1" falsecount="0"/>
+        <line num="71" count="8" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
       </file>
     </package>
   </project>

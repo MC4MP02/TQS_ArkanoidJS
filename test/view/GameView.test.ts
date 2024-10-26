@@ -101,8 +101,17 @@ describe("GameView.drawMap() con mock del Map", () => {
 
   beforeEach(() => {
     canvas = document.createElement("canvas");
-    ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    ctx = {
+      beginPath: jest.fn(),
+      arc: jest.fn(),
+      fill: jest.fn(),
+      closePath: jest.fn(),
+      clearRect: jest.fn(),
+      drawImage: jest.fn(),
+    } as unknown as CanvasRenderingContext2D;
+
     gameView = new GameView(canvas, ctx);
+    gameView["bricksSprite"] = new Image(); // Simula un sprite para evitar el valor null
 
     // Mock del contexto de dibujo
     jest.spyOn(ctx, "drawImage").mockImplementation(jest.fn());
@@ -137,7 +146,7 @@ describe("GameView.drawMap() con mock del Map", () => {
     // Comprobamos llamadas a drawImage solo para ladrillos ALIVE
     expect(ctx.drawImage).toHaveBeenCalledTimes(4); // Solo ladrillos vivos en el mock
     expect(ctx.drawImage).toHaveBeenCalledWith(
-      expect.anything(), // Seria el sprite
+      gameView["bricksSprite"], // Seria el sprite
       0, // Color
       0,
       32, // Ancho del ladrillo
@@ -153,21 +162,16 @@ describe("GameView.drawMap() con mock del Map", () => {
     gameView["drawMap"](mockMap as Map);
 
     const bricks = (mockMap.getBricks as jest.Mock).mock.results[0].value;
+    const calledCoords = (ctx.drawImage as jest.Mock).mock.calls.map((args) => [
+      args[4],
+      args[5],
+    ]);
+
     bricks.forEach((col: Brick[], colIndex: number) => {
       col.forEach((brick: Brick, rowIndex: number) => {
         if (brick.status === 0) {
-          // Verifica que drawImage no fue llamado para ladrillos DEAD
-          expect(ctx.drawImage).not.toHaveBeenCalledWith(
-            expect.anything(),
-            brick.color * 32,
-            0,
-            32,
-            16,
-            brick.BrickX,
-            brick.BrickY,
-            32,
-            16
-          );
+          // Verifica que las coordenadas del ladrillo DEAD no están en las llamadas a drawImage
+          expect(calledCoords).not.toContainEqual([brick.BrickX, brick.BrickY]);
         }
       });
     });

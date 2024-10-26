@@ -4,6 +4,9 @@ export class Ball {
   public radius: number;
   public speedX: number;
   public speedY: number;
+  private collisionPaddle: boolean = false;
+  private collisionCanvasX: boolean = false;
+  private collisionCanvasY: boolean = false;
 
   constructor(
     x: number,
@@ -28,4 +31,6 @@ export class Ball {
     this.speedY = -this.speedY;
     this.y += this.speedY;
   }
+
+  move() {}
 }

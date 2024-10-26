@@ -18,4 +18,8 @@ export class Ball {
     this.speedX = speedX;
     this.speedY = speedY;
   }
+
+  changeX() {}
+
+  changeY() {}
 }

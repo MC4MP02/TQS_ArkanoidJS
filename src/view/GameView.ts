@@ -64,6 +64,7 @@ export class GameView {
     const brickHeigth = map.getBrickHeigth();
 
     for (let c = 0; c < map.getBrickColumnCount(); c++) {
+      if (!bricks[c]) continue;
       for (let r = 0; r < map.getBrickRowCount(); r++) {
         const currentBrick = bricks[c][r];
         if (currentBrick.status === this.BRICK_STATUS.DEAD) continue;

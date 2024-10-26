@@ -14,7 +14,7 @@ describe("Ball", () => {
       expect(ball.y).toBe(100);
       expect(ball.radius).toBe(10);
       expect(ball.speedX).toBe(5);
-      expect(ball.radius).toBe(5);
+      expect(ball.speedY).toBe(5);
     });
   });
 

@@ -32,5 +32,12 @@ export class Ball {
     this.y += this.speedY;
   }
 
-  move() {}
+  move() {
+    if (this.collisionPaddle) this.speedY = -this.speedY;
+    if (this.collisionCanvasX) this.speedX = -this.speedX;
+    if (this.collisionCanvasY) this.speedY = -this.speedY;
+
+    this.x += this.speedX;
+    this.y += this.speedY;
+  }
 }

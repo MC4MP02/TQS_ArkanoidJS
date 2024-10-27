@@ -50,7 +50,8 @@ export class Ball {
     return (
       this.x + this.speedX < paddleX + paddleWidth &&
       this.x + this.speedX > paddleX &&
-      this.y + this.speedY > paddleY
+      this.y + this.speedY > paddleY &&
+      this.y + this.speedY < paddleY + paddleHeight
     );
   }
 }

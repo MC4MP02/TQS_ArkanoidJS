@@ -41,5 +41,14 @@ export class Ball {
     this.y += this.speedY;
   }
 
-  checkCollisionPaddle(paddleX: number, paddleY: number, paddleWidth: number) {}
+  private checkCollisionPaddle(
+    paddleX: number,
+    paddleY: number,
+    paddleWidth: number
+  ): boolean {
+    return (
+      this.x + this.speedX < paddleX + paddleWidth &&
+      this.x + this.speedX > paddleX
+    );
+  }
 }

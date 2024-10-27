@@ -63,4 +63,16 @@ describe("Ball", () => {
       expect(ball.speedY).toBe(-5); // Debe invertir la dirección
     });
   });
+
+  describe("checkCollisionPaddle", () => {
+    it("Debería detectar una colisión cuando el objeto está en el rango de x del paddle", () => {
+      ball.x = 50;
+      ball.speedX = 5;
+      ball.y = 100;
+      ball.speedY = 0;
+
+      const resultado = ball["checkCollisionPaddle"](40, 90, 30);
+      expect(resultado).toBe(true);
+    });
+  });
 });

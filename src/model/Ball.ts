@@ -40,4 +40,6 @@ export class Ball {
     this.x += this.speedX;
     this.y += this.speedY;
   }
+
+  checkCollisionPaddle(paddleX: number, paddleY: number, paddleWidth: number) {}
 }

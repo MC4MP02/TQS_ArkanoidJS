@@ -65,14 +65,34 @@ describe("Ball", () => {
   });
 
   describe("checkCollisionPaddle", () => {
-    it("Debería detectar una colisión cuando el objeto está en el rango de x del paddle", () => {
-      ball.x = 50;
+    it("Debería detectar una colisión cuando el objeto está en el rango de x e y del paddle", () => {
+      ball.x = 45;
       ball.speedX = 5;
-      ball.y = 100;
+      ball.y = 85;
+      ball.speedY = 10;
+
+      const resultado = ball["checkCollisionPaddle"](40, 90, 30, 20);
+      expect(resultado).toBe(true);
+    });
+
+    it("No debería detectar colisión cuando el objeto no está en el rango de y del paddle", () => {
+      ball.x = 45;
+      ball.speedX = 5;
+      ball.y = 200;
+      ball.speedY = -10;
+
+      const resultado = ball["checkCollisionPaddle"](40, 90, 30, 20);
+      expect(resultado).toBe(false);
+    });
+
+    it("No debería detectar colisión cuando el objeto no está en el rango de x del paddle", () => {
+      ball.x = 10;
+      ball.speedX = 5;
+      ball.y = 95;
       ball.speedY = 0;
 
-      const resultado = ball["checkCollisionPaddle"](40, 90, 30);
-      expect(resultado).toBe(true);
+      const resultado = ball["checkCollisionPaddle"](40, 90, 30, 20);
+      expect(resultado).toBe(false);
     });
   });
 });

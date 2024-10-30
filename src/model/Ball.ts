@@ -62,10 +62,10 @@ export class Ball {
     );
   }
 
-  private checkCollisionCanvasY(canvasHeight: number) {
+  private checkCollisionCanvasY(canvasHeight: number): boolean {
     return (
       this.y + this.speedY < this.radius ||
-      this.y + this.speedY < canvasHeight - this.radius
+      this.y + this.speedY > canvasHeight - this.radius
     );
   }
 }

@@ -54,4 +54,6 @@ export class Ball {
       this.y + this.speedY < paddleY + paddleHeight
     );
   }
+
+  private checkCollisionCanvasX(canvasWidth: number) {}
 }

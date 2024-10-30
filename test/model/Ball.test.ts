@@ -135,6 +135,15 @@ describe("Ball", () => {
       expect(resultado).toBe(true);
     });
 
+    it("Debería detectar una colisión en el borde inferior del canvas", () => {
+      ball.y = 290;
+      ball.speedY = 15;
+      ball.radius = 10;
+
+      const resultado = ball["checkCollisionCanvasY"](300);
+      expect(resultado).toBe(true);
+    });
+
     it("No debería detectar colisión cuando el objeto está dentro del canvas", () => {
       ball.y = 150;
       ball.speedY = 5;

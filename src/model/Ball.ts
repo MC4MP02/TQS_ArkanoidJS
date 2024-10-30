@@ -61,4 +61,6 @@ export class Ball {
       this.x + this.speedX < this.radius
     );
   }
+
+  private checkCollisionCanvasY(canvasHeight: number) {}
 }

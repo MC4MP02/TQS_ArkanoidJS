@@ -124,4 +124,24 @@ describe("Ball", () => {
       expect(resultado).toBe(false);
     });
   });
+
+  describe("checkCollisionCanvasY ", () => {
+    it("Debería detectar una colisión en el borde superior del canvas", () => {
+      ball.y = 5;
+      ball.speedY = -10;
+      ball.radius = 10;
+
+      const resultado = ball["checkCollisionCanvasY"](300);
+      expect(resultado).toBe(true);
+    });
+
+    it("No debería detectar colisión cuando el objeto está dentro del canvas", () => {
+      ball.y = 150;
+      ball.speedY = 5;
+      ball.radius = 10;
+
+      const resultado = ball["checkCollisionCanvasY"](300);
+      expect(resultado).toBe(false);
+    });
+  });
 });

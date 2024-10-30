@@ -55,5 +55,10 @@ export class Ball {
     );
   }
 
-  private checkCollisionCanvasX(canvasWidth: number) {}
+  private checkCollisionCanvasX(canvasWidth: number): boolean {
+    return (
+      this.x + this.speedX > canvasWidth + this.radius ||
+      this.x + this.speedX < this.radius
+    );
+  }
 }

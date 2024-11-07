@@ -68,4 +68,21 @@ export class Ball {
       this.y + this.speedY > canvasHeight - this.radius
     );
   }
+
+  private checkCollision(
+    paddleX: number,
+    paddleY: number,
+    paddleWidth: number,
+    paddleHeight: number,
+    canvasWidth: number,
+    canvasHeight: number
+  ) {
+    this.collisionPaddle = this.checkCollisionPaddle(
+      paddleX,
+      paddleY,
+      paddleWidth,
+      paddleHeight,
+    );
+  
+  }
 }

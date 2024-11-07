@@ -153,4 +153,19 @@ describe("Ball", () => {
       expect(resultado).toBe(false);
     });
   });
+
+  describe('checkCollision', () => {
+    it('should detect collision with paddle', () => {
+      const paddleX = 50;
+      const paddleY = 100;
+      const paddleWidth = 80;
+      const canvasWidth = 300;
+      const canvasHeight = 400;
+  
+      ball.checkCollision(paddleX, paddleY, paddleWidth, canvasWidth, canvasHeight);
+  
+      expect(ball["collisionPaddle"]).toBe(true);
+    });
+  });
+  
 });

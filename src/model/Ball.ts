@@ -42,7 +42,7 @@ export class Ball {
   }
 
   ballDownMap(canvasHeight: number): boolean {
-    return false;
+    return this.y + this.speedY > canvasHeight - this.radius;
   }
 
   private checkCollisionPaddle(

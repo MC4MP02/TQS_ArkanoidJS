@@ -41,6 +41,10 @@ export class Ball {
     this.y += this.speedY;
   }
 
+  ballDownMap(canvasHeight: number): boolean {
+    return false;
+  }
+
   private checkCollisionPaddle(
     paddleX: number,
     paddleY: number,

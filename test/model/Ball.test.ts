@@ -218,9 +218,18 @@ describe("Ball", () => {
         const resultado = ball.ballDownMap(canvasHeight);
         expect(resultado).toBe(true);
       });
+
+      it("no debería detectar colisión cuando está dentro del canvas", () => {
+        ball.y = 250;
+        ball.speedY = 5;
+        ball.radius = 10;
+        const canvasHeight = 300;
+    
+        const resultado = ball.ballDownMap(canvasHeight);
+        expect(resultado).toBe(false);
+      });
     });
 
-    
   });
   
 });

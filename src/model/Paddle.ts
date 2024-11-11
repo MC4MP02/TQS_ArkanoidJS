@@ -1,1 +1,7 @@
-//Habíamos creado el constructor anteriormente para que no petase el programa, no habiamos tenido en cuenta el TDD. Ahora lo haremos.
+export class Paddle {
+  public paddleWidth: number;
+
+  constructor(paddleWidth: number) {
+    this.paddleWidth = paddleWidth;
+  }
+}

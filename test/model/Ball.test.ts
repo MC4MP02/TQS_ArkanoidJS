@@ -154,58 +154,86 @@ describe("Ball", () => {
     });
   });
 
-  describe('checkCollision', () => {
-    it('debería detectar colisión con la pala', () => {
+  describe("checkCollision", () => {
+    it("debería detectar colisión con la pala", () => {
       const paddleX = 90;
-      const paddleY = 120;
+      const paddleY = 100;
       const paddleWidth = 80;
       const paddleHeight = 10;
       const canvasWidth = 300;
       const canvasHeight = 400;
-  
-      ball["checkCollision"](paddleX, paddleY, paddleWidth, paddleHeight, canvasWidth, canvasHeight);
-  
+
+      ball["checkCollision"](
+        paddleX,
+        paddleY,
+        paddleWidth,
+        paddleHeight,
+        canvasWidth,
+        canvasHeight
+      );
+
       expect(ball["collisionPaddle"]).toBe(true);
     });
-    it('debería detectar colisión con los bordes izquierdo y derecho del canvas (eje X)', () => {
+    it("debería detectar colisión con los bordes izquierdo y derecho del canvas (eje X)", () => {
       const paddleX = 90;
       const paddleY = 95;
       const paddleWidth = 80;
       const paddleHeight = 20;
-      const canvasWidth = 110; 
+      const canvasWidth = 110;
       const canvasHeight = 400;
-  
-      ball["checkCollision"](paddleX, paddleY, paddleWidth, paddleHeight, canvasWidth, canvasHeight);
-  
+
+      ball["checkCollision"](
+        paddleX,
+        paddleY,
+        paddleWidth,
+        paddleHeight,
+        canvasWidth,
+        canvasHeight
+      );
+
       expect(ball["collisionCanvasX"]).toBe(true);
     });
-  
-    it('debería detectar colisión con los bordes superior e inferior del canvas (eje Y)', () => {
+
+    it("debería detectar colisión con los bordes superior e inferior del canvas (eje Y)", () => {
       const paddleX = 90;
       const paddleY = 95;
       const paddleWidth = 80;
       const paddleHeight = 20;
       const canvasWidth = 300;
-      const canvasHeight = 110; 
-  
-      ball["checkCollision"](paddleX, paddleY, paddleWidth, paddleHeight, canvasWidth, canvasHeight);
-  
-      expect(ball["collisionCanvasY"]).toBe(true); 
+      const canvasHeight = 110;
+
+      ball["checkCollision"](
+        paddleX,
+        paddleY,
+        paddleWidth,
+        paddleHeight,
+        canvasWidth,
+        canvasHeight
+      );
+
+      expect(ball["collisionCanvasY"]).toBe(true);
     });
-  
-    it('no debería detectar colisión cuando la bola está lejos de la pala y de los bordes del canvas', () => {
+
+    it("no debería detectar colisión cuando la bola está lejos de la pala y de los bordes del canvas", () => {
       const paddleX = 200;
       const paddleY = 300;
       const paddleWidth = 80;
       const paddleHeight = 20;
       const canvasWidth = 400;
       const canvasHeight = 400;
-  
-      ball["checkCollision"](paddleX, paddleY, paddleWidth, paddleHeight, canvasWidth, canvasHeight);
-  
-      expect(ball["collisionPaddle"]).toBe(false); 
-      expect(ball["collisionCanvasX"]).toBe(false); 
-      expect(ball["collisionCanvasY"]).toBe(false); 
+
+      ball["checkCollision"](
+        paddleX,
+        paddleY,
+        paddleWidth,
+        paddleHeight,
+        canvasWidth,
+        canvasHeight
+      );
+
+      expect(ball["collisionPaddle"]).toBe(false);
+      expect(ball["collisionCanvasX"]).toBe(false);
+      expect(ball["collisionCanvasY"]).toBe(false);
     });
 
     describe("ballDownMap", () => {
@@ -214,7 +242,7 @@ describe("Ball", () => {
         ball.speedY = 10;
         ball.radius = 5;
         const canvasHeight = 300;
-    
+
         const resultado = ball.ballDownMap(canvasHeight);
         expect(resultado).toBe(true);
       });
@@ -224,12 +252,10 @@ describe("Ball", () => {
         ball.speedY = 5;
         ball.radius = 10;
         const canvasHeight = 300;
-    
+
         const resultado = ball.ballDownMap(canvasHeight);
         expect(resultado).toBe(false);
       });
     });
-
   });
-  
 });

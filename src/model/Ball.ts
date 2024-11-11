@@ -85,7 +85,7 @@ export class Ball {
       paddleX,
       paddleY,
       paddleWidth,
-      paddleHeight,
+      paddleHeight
     );
 
     this.collisionCanvasX = this.checkCollisionCanvasX(canvasWidth);

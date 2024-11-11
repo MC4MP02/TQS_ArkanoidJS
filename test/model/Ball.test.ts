@@ -207,6 +207,20 @@ describe("Ball", () => {
       expect(ball["collisionCanvasX"]).toBe(false); 
       expect(ball["collisionCanvasY"]).toBe(false); 
     });
+
+    describe("ballDownMap", () => {
+      it("debería detectar colisión en el borde inferior del canvas", () => {
+        ball.y = 295;
+        ball.speedY = 10;
+        ball.radius = 5;
+        const canvasHeight = 300;
+    
+        const resultado = ball.ballDownMap(canvasHeight);
+        expect(resultado).toBe(true);
+      });
+    });
+
+    
   });
   
 });

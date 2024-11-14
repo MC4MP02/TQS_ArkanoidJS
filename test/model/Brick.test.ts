@@ -46,21 +46,45 @@ describe("Brick", () => {
     beforeEach(() => {
       brick = new Brick(100, 100, 1, 255); // Ladrillo en posición (100, 100)
     });
+
     it("debería devolver true si la bola golpea el ladrillo", () => {
       const ballX = 150;
       const ballY = 120;
       const brickWidth = 50;
       const brickHeight = 30;
-
       expect(brick.isHit(ballX, ballY, brickWidth, brickHeight)).toBe(true);
     });
 
-    it("debería devolver false si la bola no golpea el ladrillo", () => {
+    it("debería devolver false si la bola está fuera del rango en X", () => {
       const ballX = 200;
+      const ballY = 120;
+      const brickWidth = 50;
+      const brickHeight = 30;
+      expect(brick.isHit(ballX, ballY, brickWidth, brickHeight)).toBe(false);
+    });
+
+    it("debería devolver false si la bola está fuera del rango en Y", () => {
+      const ballX = 150;
       const ballY = 200;
       const brickWidth = 50;
       const brickHeight = 30;
+      expect(brick.isHit(ballX, ballY, brickWidth, brickHeight)).toBe(false);
+    });
 
+    it("debería devolver false si el ladrillo está muerto", () => {
+      brick.status = BRICK_STATUS.DEAD; // Marcamos el ladrillo como muerto
+      const ballX = 150;
+      const ballY = 120;
+      const brickWidth = 50;
+      const brickHeight = 30;
+      expect(brick.isHit(ballX, ballY, brickWidth, brickHeight)).toBe(false);
+    });
+
+    it("debería devolver false si la bola está justo fuera del límite derecho del ladrillo", () => {
+      const ballX = 151; // Fuera por un pixel
+      const ballY = 120;
+      const brickWidth = 50;
+      const brickHeight = 30;
       expect(brick.isHit(ballX, ballY, brickWidth, brickHeight)).toBe(false);
     });
   });

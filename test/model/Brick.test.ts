@@ -29,4 +29,16 @@ describe("Brick", () => {
     const brickDead = new Brick(5, 5, BRICK_STATUS.DEAD, 100);
     expect(brickDead.status).toBe(BRICK_STATUS.DEAD);
   });
+
+  describe("isHit", () => {
+    it("debería llamar a la clase hit() y actualizar el status del brick", () => {
+      const brickAlive = new Brick(0, 0, BRICK_STATUS.ALIVE, 0);
+
+      expect(brickAlive.status).toBe(BRICK_STATUS.ALIVE);
+
+      brickAlive.hit();
+
+      expect(brickAlive.status).toBe(BRICK_STATUS.DEAD);
+    });
+  });
 });

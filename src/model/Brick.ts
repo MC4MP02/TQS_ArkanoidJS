@@ -14,4 +14,6 @@ export class Brick {
     this.status = status;
     this.color = color;
   }
+
+  hit() {}
 }

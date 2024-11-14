@@ -20,6 +20,12 @@ export class Brick {
   }
 
   isHit(ballX: number, ballY: number, brickWidth: number, brickHeigth: number) {
-    return ballX <= this.BrickX + brickWidth;
+    return (
+      this.status === this.BRICK_STATUS.ALIVE &&
+      ballX >= this.BrickX &&
+      ballX <= this.BrickX + brickWidth &&
+      ballY >= this.BrickY &&
+      ballY <= this.BrickY + brickHeigth
+    );
   }
 }

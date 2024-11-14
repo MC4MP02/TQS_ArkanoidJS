@@ -31,9 +31,6 @@ describe("Brick", () => {
   });
 
   describe("hit", () => {
-    beforeEach(() => {
-      brick = new Brick(100, 100, 1, 255); // Ladrillo en posición (100, 100)
-    });
     it("debería llamar a la clase hit() y actualizar el status del brick", () => {
       const brickAlive = new Brick(0, 0, BRICK_STATUS.ALIVE, 0);
 
@@ -46,6 +43,9 @@ describe("Brick", () => {
   });
 
   describe("isHit", () => {
+    beforeEach(() => {
+      brick = new Brick(100, 100, 1, 255); // Ladrillo en posición (100, 100)
+    });
     it("debería devolver true si la bola golpea el ladrillo", () => {
       const ballX = 150;
       const ballY = 120;

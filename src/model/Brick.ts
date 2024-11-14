@@ -19,10 +19,7 @@ export class Brick {
     this.status = this.BRICK_STATUS.DEAD;
   }
 
-  isHit(
-    ballX: number,
-    ballY: number,
-    brickWidth: number,
-    brickHeigth: number
-  ) {}
+  isHit(ballX: number, ballY: number, brickWidth: number, brickHeigth: number) {
+    return ballX <= this.BrickX + brickWidth;
+  }
 }

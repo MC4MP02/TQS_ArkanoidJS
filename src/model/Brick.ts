@@ -15,5 +15,7 @@ export class Brick {
     this.color = color;
   }
 
-  hit() {}
+  hit() {
+    this.status = this.BRICK_STATUS.DEAD;
+  }
 }

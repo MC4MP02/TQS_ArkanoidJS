@@ -30,7 +30,10 @@ describe("Brick", () => {
     expect(brickDead.status).toBe(BRICK_STATUS.DEAD);
   });
 
-  describe("isHit", () => {
+  describe("hit", () => {
+    beforeEach(() => {
+      brick = new Brick(100, 100, 1, 255); // Ladrillo en posición (100, 100)
+    });
     it("debería llamar a la clase hit() y actualizar el status del brick", () => {
       const brickAlive = new Brick(0, 0, BRICK_STATUS.ALIVE, 0);
 
@@ -39,6 +42,26 @@ describe("Brick", () => {
       brickAlive.hit();
 
       expect(brickAlive.status).toBe(BRICK_STATUS.DEAD);
+    });
+  });
+
+  describe("isHit", () => {
+    it("debería devolver true si la bola golpea el ladrillo", () => {
+      const ballX = 150;
+      const ballY = 120;
+      const brickWidth = 50;
+      const brickHeight = 30;
+
+      expect(brick.isHit(ballX, ballY, brickWidth, brickHeight)).toBe(true);
+    });
+
+    it("debería devolver false si la bola no golpea el ladrillo", () => {
+      const ballX = 200;
+      const ballY = 200;
+      const brickWidth = 50;
+      const brickHeight = 30;
+
+      expect(brick.isHit(ballX, ballY, brickWidth, brickHeight)).toBe(false);
     });
   });
 });

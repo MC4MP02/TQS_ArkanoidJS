@@ -18,4 +18,11 @@ export class Brick {
   hit() {
     this.status = this.BRICK_STATUS.DEAD;
   }
+
+  isHit(
+    ballX: number,
+    ballY: number,
+    brickWidth: number,
+    brickHeigth: number
+  ) {}
 }

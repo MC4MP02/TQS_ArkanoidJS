@@ -5,6 +5,9 @@ export class Paddle {
   public paddleY: number;
   private canvasWidth: number = 448;
 
+  private collisionRight: boolean = false;
+  private collisionLeft: boolean = false;
+
   constructor(
     paddleWidth: number,
     paddleHeight: number,
@@ -18,8 +21,8 @@ export class Paddle {
   }
 
   checkCollision() {
-    this.checkCollisionCanvasRight();
-    this.checkCollisionCanvasLeft();
+    this.collisionRight = this.checkCollisionCanvasRight();
+    this.collisionLeft = this.checkCollisionCanvasLeft();
   }
 
   checkCollisionCanvasRight(): boolean {

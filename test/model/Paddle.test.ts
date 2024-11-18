@@ -56,4 +56,16 @@ describe("Paddle", () => {
       expect(paddle.checkCollisionCanvasLeft()).toBe(true);
     });
   });
+
+  describe("Paddle: checkCOllision", () => {
+    let paddle: Paddle;
+
+    beforeEach(() => {
+      paddle = new Paddle(50, 10, 100, 380);
+    });
+
+    it("debería ejecutar checkCollision sin errores", () => {
+      expect(() => paddle.checkCollision()).not.toThrow();
+    });
+  });
 });

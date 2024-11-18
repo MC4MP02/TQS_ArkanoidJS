@@ -22,16 +22,37 @@ describe("Paddle", () => {
     let paddle: Paddle;
 
     beforeEach(() => {
-      paddle = new Paddle(50, 10, 100, 380); // Paddle de 50px de ancho, posición inicial (100, 380)
+      // Paddle de 50px de ancho y 10px de alto, posición inicial (100, 380)
+      paddle = new Paddle(50, 10, 100, 380);
     });
 
-    it("no debería detectar ninguna colisión en el borde derecho cuando la paleta está lejos del borde del canvas.", () => {
-      paddle.paddleX = 200;
+    it("debería detectar que no hay colisión en el borde derecho cuando el paddle está lejos del borde del canvas", () => {
+      paddle.paddleX = 200; // Lejos del borde derecho
       expect(paddle.checkCollisionCanvasRight()).toBe(true);
     });
 
-    it("No debería detectar ninguna colisión en el borde izquierdo cuando el Paddle está lejos del borde izquierdo del canvas.", () => {
-      paddle.paddleX = 100;
+    it("debería detectar colisión en el borde derecho cuando el paddle está al borde del canvas", () => {
+      paddle.paddleX = 398; // En el límite derecho (canvasWidth - paddleWidth)
+      expect(paddle.checkCollisionCanvasRight()).toBe(false);
+    });
+
+    it("debería detectar que no hay colisión en el borde izquierdo cuando el paddle está lejos del borde izquierdo", () => {
+      paddle.paddleX = 100; // Lejos del borde izquierdo
+      expect(paddle.checkCollisionCanvasLeft()).toBe(true);
+    });
+
+    it("debería detectar colisión en el borde izquierdo cuando el paddle está al borde del canvas", () => {
+      paddle.paddleX = 0; // En el límite izquierdo
+      expect(paddle.checkCollisionCanvasLeft()).toBe(false);
+    });
+
+    it("debería detectar que no hay colisión en el borde derecho para una posición intermedia dentro del canvas", () => {
+      paddle.paddleX = 300; // Posición intermedia
+      expect(paddle.checkCollisionCanvasRight()).toBe(true);
+    });
+
+    it("debería detectar que no hay colisión en el borde izquierdo para una posición intermedia dentro del canvas", () => {
+      paddle.paddleX = 200; // Posición intermedia
       expect(paddle.checkCollisionCanvasLeft()).toBe(true);
     });
   });

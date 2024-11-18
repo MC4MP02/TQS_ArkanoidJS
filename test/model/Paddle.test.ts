@@ -67,5 +67,15 @@ describe("Paddle", () => {
     it("debería ejecutar checkCollision sin errores", () => {
       expect(() => paddle.checkCollision()).not.toThrow();
     });
+
+    it("debería llamar a checkCollisionCanvasRight y checkCollisionCanvasLeft", () => {
+      jest.spyOn(paddle, "checkCollisionCanvasRight");
+      jest.spyOn(paddle, "checkCollisionCanvasLeft");
+
+      paddle.checkCollision();
+
+      expect(paddle.checkCollisionCanvasRight).toHaveBeenCalled();
+      expect(paddle.checkCollisionCanvasLeft).toHaveBeenCalled();
+    });
   });
 });

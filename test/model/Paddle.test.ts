@@ -57,7 +57,7 @@ describe("Paddle", () => {
     });
   });
 
-  describe("Paddle: checkCOllision", () => {
+  describe("Paddle: checkCollision", () => {
     let paddle: Paddle;
 
     beforeEach(() => {
@@ -76,6 +76,16 @@ describe("Paddle", () => {
 
       expect(paddle.checkCollisionCanvasRight).toHaveBeenCalled();
       expect(paddle.checkCollisionCanvasLeft).toHaveBeenCalled();
+    });
+
+    it("should assign collisionRight and collisionLeft correctly", () => {
+      jest.spyOn(paddle, "checkCollisionCanvasRight").mockReturnValue(true);
+      jest.spyOn(paddle, "checkCollisionCanvasLeft").mockReturnValue(false);
+
+      paddle.checkCollision();
+
+      expect(paddle["collisionRight"]).toBe(true);
+      expect(paddle["collisionLeft"]).toBe(false);
     });
   });
 });

@@ -17,7 +17,9 @@ export class Paddle {
     this.paddleY = paddleY;
   }
 
-  checkCollision() {}
+  checkCollision() {
+    return;
+  }
 
   checkCollisionCanvasRight(): boolean {
     return this.paddleX < this.canvasWidth - this.paddleWidth;

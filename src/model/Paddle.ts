@@ -18,7 +18,8 @@ export class Paddle {
   }
 
   checkCollision() {
-    return;
+    this.checkCollisionCanvasRight();
+    this.checkCollisionCanvasLeft();
   }
 
   checkCollisionCanvasRight(): boolean {

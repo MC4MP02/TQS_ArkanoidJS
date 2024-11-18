@@ -3,6 +3,7 @@ export class Paddle {
   public paddleHeight: number;
   public paddleX: number;
   public paddleY: number;
+  private canvasWidth: number = 448;
 
   constructor(
     paddleWidth: number,
@@ -17,10 +18,10 @@ export class Paddle {
   }
 
   checkCollisionCanvasRight(): boolean {
-    return true; // Mínimo necesario para pasar el test
+    return this.paddleX < this.canvasWidth - this.paddleWidth;
   }
 
   checkCollisionCanvasLeft(): boolean {
-    return true; // Mínimo necesario para pasar el test
+    return this.paddleX > 0;
   }
 }

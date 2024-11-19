@@ -38,6 +38,8 @@ export class Paddle {
   move(rightPressed: boolean, leftPressed: boolean) {
     if (rightPressed && this.collisionRight) {
       this.paddleX += this.PADDLE_SENSITIVITY;
+    } else if (leftPressed && this.collisionLeft) {
+      this.paddleX -= this.PADDLE_SENSITIVITY;
     }
   }
 }

@@ -5,6 +5,8 @@ export class Paddle {
   public paddleY: number;
   private canvasWidth: number = 448;
 
+  private PADDLE_SENSITIVITY: number = 3;
+
   private collisionRight: boolean = false;
   private collisionLeft: boolean = false;
 
@@ -31,5 +33,11 @@ export class Paddle {
 
   checkCollisionCanvasLeft(): boolean {
     return this.paddleX > 0;
+  }
+
+  move(rightPressed: boolean, leftPressed: boolean) {
+    if (rightPressed && this.collisionRight) {
+      this.paddleX += this.PADDLE_SENSITIVITY;
+    }
   }
 }

@@ -94,7 +94,7 @@ describe("Paddle", () => {
 
     beforeEach(() => {
       paddle = new Paddle(50, 10, 100, 380);
-      paddle["PADDLE_SENSITIVITY"] = 10; // Sensibilidad ficticia para pruebas
+      paddle["PADDLE_SENSITIVITY"] = 10;
       paddle["paddleX"] = 50; // Posición inicial
       paddle["collisionRight"] = true;
       paddle["collisionLeft"] = false;
@@ -111,6 +111,31 @@ describe("Paddle", () => {
 
       paddle.move(false, true);
       expect(paddle["paddleX"]).toBe(40); // paddleX - PADDLE_SENSITIVITY
+    });
+
+    it("no debería mover el paddle si no hay colisión en la respectiva dirección", () => {
+      paddle["collisionRight"] = false;
+      paddle["collisionLeft"] = false;
+
+      paddle.move(true, false);
+      expect(paddle["paddleX"]).toBe(50); // No movimiento a la derecha
+
+      paddle.move(false, true);
+      expect(paddle["paddleX"]).toBe(50); // No movimiento a la izquierda
+    });
+
+    it("debería moverse solo en la dirección permitida por la colisión cuando ambas teclas están presionadas", () => {
+      paddle["collisionRight"] = true;
+      paddle["collisionLeft"] = false;
+
+      paddle.move(true, true);
+      expect(paddle["paddleX"]).toBe(60); // Se mueve a la derecha
+
+      paddle["collisionRight"] = false;
+      paddle["collisionLeft"] = true;
+
+      paddle.move(true, true);
+      expect(paddle["paddleX"]).toBe(50); // Se mueve a la izquierda desde 60 -> 50
     });
   });
 });

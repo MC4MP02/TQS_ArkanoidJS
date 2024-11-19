@@ -78,7 +78,7 @@ describe("Paddle", () => {
       expect(paddle.checkCollisionCanvasLeft).toHaveBeenCalled();
     });
 
-    it("should assign collisionRight and collisionLeft correctly", () => {
+    it("debería assignar collisionRight y collisionLeft de manera correcta", () => {
       jest.spyOn(paddle, "checkCollisionCanvasRight").mockReturnValue(true);
       jest.spyOn(paddle, "checkCollisionCanvasLeft").mockReturnValue(false);
 
@@ -100,9 +100,17 @@ describe("Paddle", () => {
       paddle["collisionLeft"] = false;
     });
 
-    it("should move paddle to the right when rightPressed is true and collisionRight is true", () => {
+    it("debería mover el paddle a la derecha cuando rightPressed es true y collisionRight es true", () => {
       paddle.move(true, false);
       expect(paddle["paddleX"]).toBe(60); // paddleX + PADDLE_SENSITIVITY
+    });
+
+    it("debería mover el paddle a la izquierda cuando leftPressed es true y collisionLeft es true", () => {
+      paddle["collisionRight"] = false; // Reset colisión derecha
+      paddle["collisionLeft"] = true;
+
+      paddle.move(false, true);
+      expect(paddle["paddleX"]).toBe(40); // paddleX - PADDLE_SENSITIVITY
     });
   });
 });

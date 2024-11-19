@@ -88,4 +88,21 @@ describe("Paddle", () => {
       expect(paddle["collisionLeft"]).toBe(false);
     });
   });
+
+  describe("move", () => {
+    let paddle: Paddle;
+
+    beforeEach(() => {
+      paddle = new Paddle(50, 10, 100, 380);
+      paddle["PADDLE_SENSITIVITY"] = 10; // Sensibilidad ficticia para pruebas
+      paddle["paddleX"] = 50; // Posición inicial
+      paddle["collisionRight"] = true;
+      paddle["collisionLeft"] = false;
+    });
+
+    it("should move paddle to the right when rightPressed is true and collisionRight is true", () => {
+      paddle.move(true, false);
+      expect(paddle["paddleX"]).toBe(60); // paddleX + PADDLE_SENSITIVITY
+    });
+  });
 });

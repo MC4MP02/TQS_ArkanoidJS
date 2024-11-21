@@ -61,4 +61,18 @@ describe("Map", () => {
     expect(map.getBrickHeigth()).toBe(20);
     expect(map.getBricks()).toEqual([[mockBrickAlive, mockBrickDead]]);
   });
+
+  describe("selectLevel", () => {
+    it("debería asignar valores correctos al seleccionar el nivel 1", () => {
+      map.selectLevel(1);
+
+      expect(map["brickColumnCount"]).toBe(13);
+      expect(map["brickRowCount"]).toBe(7);
+      expect(map["brickWidth"]).toBe(32);
+      expect(map["brickHeigth"]).toBe(16);
+      expect(map["brickPadding"]).toBe(0);
+      expect(map["brickOffsetLeft"]).toBe(16);
+      expect(map["brickOffsetTop"]).toBe(80);
+    });
+  });
 });

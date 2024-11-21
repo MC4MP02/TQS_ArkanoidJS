@@ -46,6 +46,14 @@ export class Map {
       this.brickPadding = 0;
       this.brickOffsetLeft = 16;
       this.brickOffsetTop = 80;
+    } else {
+      this.brickColumnCount = 0;
+      this.brickRowCount = 0;
+      this.brickWidth = 0;
+      this.brickHeigth = 0;
+      this.brickPadding = 0;
+      this.brickOffsetLeft = 0;
+      this.brickOffsetTop = 0;
     }
   }
 }

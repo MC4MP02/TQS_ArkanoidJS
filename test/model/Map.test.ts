@@ -75,4 +75,16 @@ describe("Map", () => {
       expect(map["brickOffsetTop"]).toBe(80);
     });
   });
+
+  it("debería reiniciar las propiedades al seleccionar un nivel no válido", () => {
+    map.selectLevel(99); // Nivel no válido
+
+    expect(map["brickColumnCount"]).toBe(0);
+    expect(map["brickRowCount"]).toBe(0);
+    expect(map["brickWidth"]).toBe(0);
+    expect(map["brickHeigth"]).toBe(0);
+    expect(map["brickPadding"]).toBe(0);
+    expect(map["brickOffsetLeft"]).toBe(0);
+    expect(map["brickOffsetTop"]).toBe(0);
+  });
 });

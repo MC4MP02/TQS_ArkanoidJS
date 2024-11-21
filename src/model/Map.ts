@@ -55,5 +55,9 @@ export class Map {
       this.brickOffsetLeft = 0;
       this.brickOffsetTop = 0;
     }
+
+    this.generateBricks();
   }
+
+  generateBricks() {}
 }

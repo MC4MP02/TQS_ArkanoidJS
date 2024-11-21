@@ -37,5 +37,15 @@ export class Map {
     return this.brickHeigth;
   }
 
-  selectLevel(level: number) {}
+  selectLevel(level: number) {
+    if (level === 1) {
+      this.brickColumnCount = 13;
+      this.brickRowCount = 7;
+      this.brickWidth = 32;
+      this.brickHeigth = 16;
+      this.brickPadding = 0;
+      this.brickOffsetLeft = 16;
+      this.brickOffsetTop = 80;
+    }
+  }
 }

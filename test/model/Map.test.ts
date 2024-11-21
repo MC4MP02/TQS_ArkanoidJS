@@ -87,4 +87,14 @@ describe("Map", () => {
     expect(map["brickOffsetLeft"]).toBe(0);
     expect(map["brickOffsetTop"]).toBe(0);
   });
+
+  it("debería llamar a generateBricks al seleccionar cualquier nivel", () => {
+    jest.spyOn(map, "generateBricks");
+
+    map.selectLevel(1); // Nivel válido
+    expect(map.generateBricks).toHaveBeenCalled();
+
+    map.selectLevel(99); // Nivel no válido
+    expect(map.generateBricks).toHaveBeenCalledTimes(2);
+  });
 });

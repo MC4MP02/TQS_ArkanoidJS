@@ -108,5 +108,25 @@ describe("Map", () => {
       expect(map["bricks"][0].length).toBe(3); // Tres filas en la primera columna
       expect(map["bricks"][1].length).toBe(3); // Tres filas en la segunda columna
     });
+
+    it("debería asignar posiciones correctas a los bricks", () => {
+      map["brickColumnCount"] = 1; // Una columna
+      map["brickRowCount"] = 1; // Una fila
+      map["brickWidth"] = 32;
+      map["brickHeigth"] = 16;
+      map["brickPadding"] = 2;
+      map["brickOffsetLeft"] = 10;
+      map["brickOffsetTop"] = 20;
+
+      map.generateBricks();
+
+      const brick = map["bricks"][0][0];
+      expect(brick).toEqual(
+        expect.objectContaining({
+          BrickX: 10, // Offset izquierdo
+          BrickY: 20, // Offset superior
+        })
+      );
+    });
   });
 });

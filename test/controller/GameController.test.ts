@@ -97,4 +97,33 @@ describe("GameController", () => {
     gameViewMock.render(BallMock, PaddleMock, MapMock);
     expect(renderSpy).toHaveBeenCalled();
   });
+
+  describe("initEvents", () => {
+    let gameController: GameController;
+    let addEventListenerSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      const mockView = {} as GameView; // Mock básico de GameView
+      gameController = new GameController(mockView); // Deberia llamar automaticamente al initEvents
+      addEventListenerSpy = jest.spyOn(document, "addEventListener");
+    });
+
+    afterEach(() => {
+      addEventListenerSpy.mockRestore();
+    });
+
+    it('debería registrar un evento "keydown"', () => {
+      expect(addEventListenerSpy).toHaveBeenCalledWith(
+        "keydown",
+        expect.any(Function)
+      );
+    });
+
+    it('debería registrar un evento "keyup"', () => {
+      expect(addEventListenerSpy).toHaveBeenCalledWith(
+        "keyup",
+        expect.any(Function)
+      );
+    });
+  });
 });

@@ -128,5 +128,29 @@ describe("GameController", () => {
         expect.any(Function)
       );
     });
+
+    it("debería vincular los manejadores de eventos al contexto de GameController", () => {
+      const mockView = {} as GameView; // Mock básico de GameView
+      const gameController = new GameController(mockView);
+
+      // Crear mocks para los métodos keyDownHandler y keyUpHandler
+      const keyDownHandlerMock = jest.fn();
+      const keyUpHandlerMock = jest.fn();
+
+      // Sobrescribir los métodos en la instancia del controlador
+      gameController["keyDownHandler"] = keyDownHandlerMock;
+      gameController["keyUpHandler"] = keyUpHandlerMock;
+
+      // Forzar la llamada a initEvents para garantizar que se añadan los listeners
+      gameController["initEvents"]();
+
+      // Disparar eventos
+      document.dispatchEvent(new KeyboardEvent("keydown"));
+      document.dispatchEvent(new KeyboardEvent("keyup"));
+
+      // Verificar que los métodos sean llamados
+      expect(keyDownHandlerMock).toHaveBeenCalled();
+      expect(keyUpHandlerMock).toHaveBeenCalled();
+    });
   });
 });

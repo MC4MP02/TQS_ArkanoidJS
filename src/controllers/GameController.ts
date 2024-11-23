@@ -24,7 +24,10 @@ export class GameController {
   }
 
   private initEvents() {
-    document.addEventListener("keydown", () => {});
-    document.addEventListener("keyup", () => {});
+    document.addEventListener("keydown", this.keyDownHandler.bind(this));
+    document.addEventListener("keyup", this.keyUpHandler.bind(this));
   }
+
+  private keyDownHandler(event: KeyboardEvent) {}
+  private keyUpHandler(event: KeyboardEvent) {}
 }

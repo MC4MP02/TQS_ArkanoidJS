@@ -99,12 +99,9 @@ describe("GameController", () => {
   });
 
   describe("initEvents", () => {
-    let gameController: GameController;
     let addEventListenerSpy: jest.SpyInstance;
 
     beforeEach(() => {
-      const mockView = {} as GameView; // Mock básico de GameView
-      gameController = new GameController(mockView); // Deberia llamar automaticamente al initEvents
       addEventListenerSpy = jest.spyOn(document, "addEventListener");
     });
 
@@ -113,6 +110,9 @@ describe("GameController", () => {
     });
 
     it('debería registrar un evento "keydown"', () => {
+      const mockView = {} as GameView; // Mock básico de GameView
+      new GameController(mockView); // Deberia llamar automaticamente al initEvents
+
       expect(addEventListenerSpy).toHaveBeenCalledWith(
         "keydown",
         expect.any(Function)
@@ -120,6 +120,9 @@ describe("GameController", () => {
     });
 
     it('debería registrar un evento "keyup"', () => {
+      const mockView = {} as GameView; // Mock básico de GameView
+      new GameController(mockView); // Deberia llamar automaticamente al initEvents
+
       expect(addEventListenerSpy).toHaveBeenCalledWith(
         "keyup",
         expect.any(Function)

@@ -60,6 +60,11 @@ export class Map {
   }
 
   generateBricks() {
-    // TEST FOR CI/CD ONLY
+    for (let c = 0; c < this.brickColumnCount; c++) {
+      this.bricks[c] = [];
+      for (let r = 0; r < this.brickRowCount; r++) {
+        this.bricks[c][r] = new Brick(0, 0, 0, 0); // Inicialización básica
+      }
+    }
   }
 }

@@ -45,6 +45,31 @@ describe("GameController", () => {
       sprite: document.createElement("img"),
     } as any;
 
+    BallMock = {
+      x: 0,
+      y: 0,
+      dx: 0,
+      dy: 0,
+      radius: 5,
+      move: jest.fn(),
+      checkCollision: jest.fn(),
+    } as unknown as jest.Mocked<Ball>;
+
+    PaddleMock = {
+      x: 0,
+      y: 0,
+      width: 75,
+      height: 10,
+      dx: 0,
+      move: jest.fn(),
+    } as unknown as jest.Mocked<Paddle>;
+
+    MapMock = {
+      bricks: [],
+      initializeMap: jest.fn(),
+      checkCollision: jest.fn(),
+    } as unknown as jest.Mocked<Map>;
+
     gameControllerMock = new GameController(gameViewMock);
   });
 

@@ -9,6 +9,7 @@ export class GameController {
 
   constructor(view: GameView) {
     this.view = view;
+    this.initEvents();
   }
 
   public startGameMethod() {
@@ -20,5 +21,10 @@ export class GameController {
 
   public getIsRunning() {
     return this.isRunning;
+  }
+
+  private initEvents() {
+    document.addEventListener("keydown", () => {});
+    document.addEventListener("keyup", () => {});
   }
 }

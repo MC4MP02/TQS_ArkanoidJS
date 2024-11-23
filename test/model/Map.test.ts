@@ -74,27 +74,39 @@ describe("Map", () => {
       expect(map["brickOffsetLeft"]).toBe(16);
       expect(map["brickOffsetTop"]).toBe(80);
     });
+
+    it("debería reiniciar las propiedades al seleccionar un nivel no válido", () => {
+      map.selectLevel(99); // Nivel no válido
+
+      expect(map["brickColumnCount"]).toBe(0);
+      expect(map["brickRowCount"]).toBe(0);
+      expect(map["brickWidth"]).toBe(0);
+      expect(map["brickHeigth"]).toBe(0);
+      expect(map["brickPadding"]).toBe(0);
+      expect(map["brickOffsetLeft"]).toBe(0);
+      expect(map["brickOffsetTop"]).toBe(0);
+    });
+
+    it("debería llamar a generateBricks al seleccionar cualquier nivel", () => {
+      jest.spyOn(map, "generateBricks");
+
+      map.selectLevel(1); // Nivel válido
+      expect(map.generateBricks).toHaveBeenCalled();
+
+      map.selectLevel(99); // Nivel no válido
+      expect(map.generateBricks).toHaveBeenCalledTimes(2);
+    });
   });
+  describe("generateBricks", () => {
+    it("debería inicializar la matriz de bricks con las dimensiones correctas", () => {
+      map["brickColumnCount"] = 2; // Dos columnas
+      map["brickRowCount"] = 3; // Tres filas
 
-  it("debería reiniciar las propiedades al seleccionar un nivel no válido", () => {
-    map.selectLevel(99); // Nivel no válido
+      map.generateBricks();
 
-    expect(map["brickColumnCount"]).toBe(0);
-    expect(map["brickRowCount"]).toBe(0);
-    expect(map["brickWidth"]).toBe(0);
-    expect(map["brickHeigth"]).toBe(0);
-    expect(map["brickPadding"]).toBe(0);
-    expect(map["brickOffsetLeft"]).toBe(0);
-    expect(map["brickOffsetTop"]).toBe(0);
-  });
-
-  it("debería llamar a generateBricks al seleccionar cualquier nivel", () => {
-    jest.spyOn(map, "generateBricks");
-
-    map.selectLevel(1); // Nivel válido
-    expect(map.generateBricks).toHaveBeenCalled();
-
-    map.selectLevel(99); // Nivel no válido
-    expect(map.generateBricks).toHaveBeenCalledTimes(2);
+      expect(map["bricks"].length).toBe(2); // Dos columnas
+      expect(map["bricks"][0].length).toBe(3); // Tres filas en la primera columna
+      expect(map["bricks"][1].length).toBe(3); // Tres filas en la segunda columna
+    });
   });
 });

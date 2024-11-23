@@ -59,5 +59,7 @@ export class Map {
     this.generateBricks();
   }
 
-  generateBricks() {}
+  generateBricks() {
+    // TEST FOR CI/CD ONLY
+  }
 }

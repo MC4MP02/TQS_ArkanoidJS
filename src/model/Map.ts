@@ -68,7 +68,14 @@ export class Map {
         const brickY =
           r * (this.brickHeigth + this.brickPadding) + this.brickOffsetTop;
 
-        this.bricks[c][r] = new Brick(brickX, brickY, 0, 0); // Inicializamos con posiciones
+        const random = Math.floor(Math.random() * 8);
+
+        this.bricks[c][r] = new Brick(
+          brickX,
+          brickY,
+          this.BRICK_STATUS.ALIVE,
+          random
+        );
       }
     }
   }

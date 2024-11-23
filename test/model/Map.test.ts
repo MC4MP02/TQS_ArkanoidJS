@@ -1,3 +1,4 @@
+import { Brick } from "../../src/model/Brick";
 import { Map } from "../../src/model/Map";
 
 describe("Map", () => {
@@ -127,6 +128,34 @@ describe("Map", () => {
           BrickY: 20, // Offset superior
         })
       );
+    });
+
+    it("debería inicializar cada ladrillo como una instancia de Brick", () => {
+      map["brickColumnCount"] = 1; // Una columna
+      map["brickRowCount"] = 1; // Una fila
+      map["brickWidth"] = 32;
+      map["brickHeigth"] = 16;
+      map["brickPadding"] = 2;
+      map["brickOffsetLeft"] = 10;
+      map["brickOffsetTop"] = 20;
+      map["BRICK_STATUS"] = { ALIVE: 1, DEAD: 0 };
+
+      jest.spyOn(global.Math, "random").mockReturnValue(0.5); // Simular un número aleatorio fijo
+
+      map.generateBricks();
+
+      const brick = map["bricks"][0][0];
+      expect(brick).toBeInstanceOf(Brick);
+      expect(brick).toEqual(
+        expect.objectContaining({
+          BrickX: 10, // Offset izquierdo
+          BrickY: 20, // Offset superior
+          status: 1, // Estado inicial
+          color: 4, // Número aleatorio (Math.random() * 8)
+        })
+      );
+
+      jest.spyOn(global.Math, "random").mockRestore(); // Restaurar el comportamiento de Math.random
     });
   });
 });

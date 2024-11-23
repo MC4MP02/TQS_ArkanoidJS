@@ -63,7 +63,12 @@ export class Map {
     for (let c = 0; c < this.brickColumnCount; c++) {
       this.bricks[c] = [];
       for (let r = 0; r < this.brickRowCount; r++) {
-        this.bricks[c][r] = new Brick(0, 0, 0, 0); // Inicialización básica
+        const brickX =
+          c * (this.brickWidth + this.brickPadding) + this.brickOffsetLeft;
+        const brickY =
+          r * (this.brickHeigth + this.brickPadding) + this.brickOffsetTop;
+
+        this.bricks[c][r] = new Brick(brickX, brickY, 0, 0); // Inicializamos con posiciones
       }
     }
   }

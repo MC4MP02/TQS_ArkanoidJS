@@ -8,6 +8,7 @@ export class GameController {
   private isRunning: boolean = false;
   private rightPressed: boolean = false;
   private leftPressed: boolean = false;
+  private startGame: boolean = false;
 
   constructor(view: GameView) {
     this.view = view;
@@ -32,10 +33,18 @@ export class GameController {
 
   private keyDownHandler(event: KeyboardEvent) {
     const { key } = event;
-    if (key === "ArrowRight") {
+    if (key === "Right" || key === "ArrowRight") {
       this.rightPressed = true;
-    } else if (key === "ArrowLeft") {
+    } else if (key === "Left" || key === "ArrowLeft") {
       this.leftPressed = true;
+    }
+
+    if (key === " ") {
+      if (this.startGame && !this.isRunning) {
+        this.startGameMethod(); // Iniciar el juego solo si startGame es true y isRunning es false
+      } else {
+        this.isRunning = false; // Si el juego ya está corriendo, se detiene
+      }
     }
   }
 

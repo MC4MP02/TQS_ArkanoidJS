@@ -175,5 +175,35 @@ describe("GameController", () => {
 
       expect(gameController["leftPressed"]).toBe(true);
     });
+
+    it("debería iniciar el juego si se presiona la barra espaciadora cuando startGame es true y isRunning es false", () => {
+      const startGameMethodSpy = jest.spyOn(gameController, "startGameMethod");
+      gameController["startGame"] = true;
+      gameController["isRunning"] = false;
+
+      const event = new KeyboardEvent("keydown", { key: " " });
+      gameController["keyDownHandler"](event);
+
+      expect(startGameMethodSpy).toHaveBeenCalled();
+      expect(gameController["isRunning"]).toBe(true);
+    });
+
+    it("debería detener el juego si se presiona la barra espaciadora cuando isRunning es true", () => {
+      gameController["startGame"] = true;
+      gameController["isRunning"] = true;
+
+      const event = new KeyboardEvent("keydown", { key: " " });
+      gameController["keyDownHandler"](event);
+
+      expect(gameController["isRunning"]).toBe(false);
+    });
+
+    it("no debería cambiar propiedades para teclas irrelevantes", () => {
+      const event = new KeyboardEvent("keydown", { key: "A" });
+      gameController["keyDownHandler"](event);
+
+      expect(gameController["rightPressed"]).toBe(false);
+      expect(gameController["leftPressed"]).toBe(false);
+    });
   });
 });

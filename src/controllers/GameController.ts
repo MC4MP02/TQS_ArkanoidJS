@@ -6,6 +6,8 @@ import { Brick } from "../model/Brick";
 export class GameController {
   private view: GameView;
   private isRunning: boolean = false;
+  private rightPressed: boolean = false;
+  private leftPressed: boolean = false;
 
   constructor(view: GameView) {
     this.view = view;
@@ -28,6 +30,14 @@ export class GameController {
     document.addEventListener("keyup", this.keyUpHandler.bind(this));
   }
 
-  private keyDownHandler(event: KeyboardEvent) {}
+  private keyDownHandler(event: KeyboardEvent) {
+    const { key } = event;
+    if (key === "ArrowRight") {
+      this.rightPressed = true;
+    } else if (key === "ArrowLeft") {
+      this.leftPressed = true;
+    }
+  }
+
   private keyUpHandler(event: KeyboardEvent) {}
 }

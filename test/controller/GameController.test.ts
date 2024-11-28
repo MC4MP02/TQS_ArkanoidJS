@@ -223,11 +223,35 @@ describe("GameController", () => {
       expect(gameController["rightPressed"]).toBe(false);
     });
 
+    it("debería establecer rightPressed en false cuando se suelta 'Right'", () => {
+      gameController["rightPressed"] = true; // Simulamos que estaba presionado
+      const event = new KeyboardEvent("keyup", { key: "Right" });
+      gameController["keyUpHandler"](event);
+
+      expect(gameController["rightPressed"]).toBe(false);
+    });
+
     it("debería establecer leftPressed en false cuando se suelta 'ArrowLeft'", () => {
       gameController["leftPressed"] = true; // Simulamos que estaba presionado
       const event = new KeyboardEvent("keyup", { key: "ArrowLeft" });
       gameController["keyUpHandler"](event);
 
+      expect(gameController["leftPressed"]).toBe(false);
+    });
+
+    it("debería establecer leftPressed en false cuando se suelta 'Left'", () => {
+      gameController["leftPressed"] = true; // Simulamos que estaba presionado
+      const event = new KeyboardEvent("keyup", { key: "Left" });
+      gameController["keyUpHandler"](event);
+
+      expect(gameController["leftPressed"]).toBe(false);
+    });
+
+    it("no debería cambiar propiedades para teclas irrelevantes", () => {
+      const event = new KeyboardEvent("keyup", { key: "A" });
+      gameController["keyUpHandler"](event);
+
+      expect(gameController["rightPressed"]).toBe(false);
       expect(gameController["leftPressed"]).toBe(false);
     });
   });

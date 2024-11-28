@@ -286,16 +286,92 @@ describe("GameController", () => {
     });
 
     it("debería finalizar el juego y recargar la página si la bola se sale del mapa", () => {
+      // Configurar el mock para que `ballDownMap` devuelva true (bola fuera del mapa)
       mockBall.ballDownMap.mockReturnValue(true);
 
+      // Llamar al método que se va a probar
       gameController["checkCollisions"]();
 
+      // Verificar que se llamó a ballDownMap con el canvasHeight
       expect(mockBall.ballDownMap).toHaveBeenCalledWith(
         gameController["canvasHeight"]
       );
+
+      // Verificar que se detuvo el juego
       expect(gameController["isRunning"]).toBe(false);
       expect(gameController["startGame"]).toBe(false);
+
+      // Verificar que se llamó a reloadPage
       expect(reloadSpy).toHaveBeenCalled();
+    });
+
+    it("no debería finalizar el juego ni recargar la página si la bola no se sale del mapa", () => {
+      // Configurar el mock para que `ballDownMap` devuelva false (bola dentro del mapa)
+      mockBall.ballDownMap.mockReturnValue(false);
+
+      // Llamar al método que se va a probar
+      gameController["checkCollisions"]();
+
+      // Verificar que se llamó a ballDownMap con el canvasHeight
+      expect(mockBall.ballDownMap).toHaveBeenCalledWith(
+        gameController["canvasHeight"]
+      );
+
+      // Verificar que no se cambió el estado del juego
+      expect(gameController["isRunning"]).toBe(false); // No cambia porque el juego no estaba corriendo
+      expect(gameController["startGame"]).toBe(false); // No cambia porque el juego no estaba iniciado
+
+      // Verificar que no se llamó a reloadPage
+      expect(reloadSpy).not.toHaveBeenCalled();
+    });
+
+    it("debería verificar la colisión en la Ball", () => {
+      // Configurar el mock para que `ballDownMap` devuelva false
+      mockBall.ballDownMap.mockReturnValue(false);
+
+      const checkCollisionSpy = jest.fn();
+      mockBall["checkCollision"] = checkCollisionSpy;
+
+      // Llamar al método que se va a probar
+      gameController["checkCollisions"]();
+
+      // Verificar que se llamó a `checkCollision` de la bola con los parámetros correctos
+      expect(checkCollisionSpy).toHaveBeenCalledWith(
+        mockPaddle.paddleX,
+        mockPaddle.paddleY,
+        mockPaddle.paddleWidth,
+        mockPaddle.paddleHeight,
+        gameController["canvasWidth"],
+        gameController["canvasHeight"]
+      );
+    });
+
+    it("debería verificar la colisión en el Paddle", () => {
+      // Configurar el mock para que `ballDownMap` devuelva false
+      mockBall.ballDownMap.mockReturnValue(false);
+
+      const checkCollisionSpy = jest.fn();
+      mockPaddle["checkCollision"] = checkCollisionSpy;
+
+      // Llamar al método que se va a probar
+      gameController["checkCollisions"]();
+
+      // Verificar que se llamó a `checkCollision`
+      expect(checkCollisionSpy).toHaveBeenCalled();
+    });
+
+    it("debería llamar a mapCollision()", () => {
+      // Configurar el mock para que `ballDownMap` devuelva false
+      mockBall.ballDownMap.mockReturnValue(false);
+
+      // Reemplazar mapCollision con un mock para poder espiarlo
+      gameController["mapCollision"] = jest.fn();
+
+      // Llamar al método que se va a probar
+      gameController["checkCollisions"]();
+
+      // Verificar que se llamó a `mapCollision`
+      expect(gameController["mapCollision"]).toHaveBeenCalled();
     });
   });
 });

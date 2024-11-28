@@ -206,4 +206,29 @@ describe("GameController", () => {
       expect(gameController["leftPressed"]).toBe(false);
     });
   });
+
+  describe("keyUpHandler", () => {
+    let gameController: GameController;
+
+    beforeEach(() => {
+      const mockView = {} as GameView;
+      gameController = new GameController(mockView);
+    });
+
+    it("debería establecer rightPressed en false cuando se suelta 'ArrowRight'", () => {
+      gameController["rightPressed"] = true; // Simulamos que estaba presionado
+      const event = new KeyboardEvent("keyup", { key: "ArrowRight" });
+      gameController["keyUpHandler"](event);
+
+      expect(gameController["rightPressed"]).toBe(false);
+    });
+
+    it("debería establecer leftPressed en false cuando se suelta 'ArrowLeft'", () => {
+      gameController["leftPressed"] = true; // Simulamos que estaba presionado
+      const event = new KeyboardEvent("keyup", { key: "ArrowLeft" });
+      gameController["keyUpHandler"](event);
+
+      expect(gameController["leftPressed"]).toBe(false);
+    });
+  });
 });

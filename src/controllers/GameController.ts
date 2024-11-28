@@ -48,5 +48,12 @@ export class GameController {
     }
   }
 
-  private keyUpHandler(event: KeyboardEvent) {}
+  private keyUpHandler(event: KeyboardEvent) {
+    const { key } = event;
+    if (key === "ArrowRight") {
+      this.rightPressed = false;
+    } else if (key === "ArrowLeft") {
+      this.leftPressed = false;
+    }
+  }
 }

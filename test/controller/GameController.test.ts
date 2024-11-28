@@ -255,4 +255,47 @@ describe("GameController", () => {
       expect(gameController["leftPressed"]).toBe(false);
     });
   });
+
+  describe("checkCollisions", () => {
+    let gameController: GameController;
+    let mockBall: jest.Mocked<Ball>;
+    let mockPaddle: jest.Mocked<Paddle>;
+    let mockMap: jest.Mocked<Map>;
+    let mockView: jest.Mocked<GameView>;
+    let reloadSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      mockBall = new Ball(0, 0, 0, 0, 0) as jest.Mocked<Ball>;
+      mockPaddle = new Paddle(0, 0, 0, 0) as jest.Mocked<Paddle>;
+      mockMap = new Map() as jest.Mocked<Map>;
+      mockView = {} as jest.Mocked<GameView>;
+
+      gameController = new GameController(mockView);
+      gameController["ball"] = mockBall;
+      gameController["paddle"] = mockPaddle;
+      gameController["map"] = mockMap;
+
+      // Mockear el método reloadPage
+      reloadSpy = jest
+        .spyOn(gameController as any, "reloadPage")
+        .mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it("debería finalizar el juego y recargar la página si la bola se sale del mapa", () => {
+      mockBall.ballDownMap.mockReturnValue(true);
+
+      gameController["checkCollisions"]();
+
+      expect(mockBall.ballDownMap).toHaveBeenCalledWith(
+        gameController["canvasHeight"]
+      );
+      expect(gameController["isRunning"]).toBe(false);
+      expect(gameController["startGame"]).toBe(false);
+      expect(reloadSpy).toHaveBeenCalled();
+    });
+  });
 });

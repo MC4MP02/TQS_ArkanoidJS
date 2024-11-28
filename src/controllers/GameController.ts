@@ -73,11 +73,30 @@ export class GameController {
   }
 
   private checkCollisions() {
+    //BALL COLLISION
     if (this.ball.ballDownMap(this.canvasHeight)) {
+      console.log("GAME OVER");
       this.isRunning = false;
       this.startGame = false;
       this.reloadPage();
       return;
     }
+
+    this.ball["checkCollision"](
+      this.paddle.paddleX,
+      this.paddle.paddleY,
+      this.paddle.paddleWidth,
+      this.paddle.paddleHeight,
+      this.canvasWidth,
+      this.canvasHeight
+    );
+
+    // PADDLE COLLISION
+    this.paddle.checkCollision();
+
+    // MAP COLLISION
+    this.mapCollision();
   }
+
+  private mapCollision() {}
 }

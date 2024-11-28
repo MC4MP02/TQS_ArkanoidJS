@@ -2,6 +2,7 @@ import { GameView } from "../view/GameView";
 import { Ball } from "../model/Ball";
 import { Paddle } from "../model/Paddle";
 import { Brick } from "../model/Brick";
+import { Map } from "../model/Map";
 
 export class GameController {
   private view: GameView;
@@ -10,8 +11,18 @@ export class GameController {
   private leftPressed: boolean = false;
   private startGame: boolean = false;
 
+  private ball: Ball;
+  private paddle: Paddle;
+  private map: Map;
+
+  private canvasWidth: number = 448;
+  private canvasHeight: number = 400;
+
   constructor(view: GameView) {
     this.view = view;
+    this.ball = new Ball(0, 0, 0, 0, 0); // Inicializacion por defecto
+    this.paddle = new Paddle(0, 0, 0, 0); // Inicializacion por defecto
+    this.map = new Map(); // Inicializacion por defecto
     this.initEvents();
   }
 
@@ -54,6 +65,19 @@ export class GameController {
       this.rightPressed = false;
     } else if (key === "Left" || key === "ArrowLeft") {
       this.leftPressed = false;
+    }
+  }
+
+  private reloadPage(): void {
+    document.location.reload();
+  }
+
+  private checkCollisions() {
+    if (this.ball.ballDownMap(this.canvasHeight)) {
+      this.isRunning = false;
+      this.startGame = false;
+      this.reloadPage();
+      return;
     }
   }
 }

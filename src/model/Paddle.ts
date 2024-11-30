@@ -3,12 +3,12 @@ export class Paddle {
   public paddleHeight: number;
   public paddleX: number;
   public paddleY: number;
-  private canvasWidth: number = 448;
+  public canvasWidth: number = 448;
 
-  private PADDLE_SENSITIVITY: number = 3;
+  public PADDLE_SENSITIVITY: number = 3;
 
-  private collisionRight: boolean = false;
-  private collisionLeft: boolean = false;
+  public collisionRight: boolean = false;
+  public collisionLeft: boolean = false;
 
   constructor(
     paddleWidth: number,

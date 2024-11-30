@@ -105,6 +105,7 @@ describe("Paddle", () => {
       expect(paddle["paddleX"]).toBe(60); // paddleX + PADDLE_SENSITIVITY
     });
 
+    //Las combinaciones de las diferentes condiciones cumplen un condition coverage del 100%
     it("debería mover el paddle a la izquierda cuando leftPressed es true y collisionLeft es true", () => {
       paddle["collisionRight"] = false; // Reset colisión derecha
       paddle["collisionLeft"] = true;

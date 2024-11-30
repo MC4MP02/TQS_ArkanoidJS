@@ -8,15 +8,51 @@ jest.mock("../../src/view/GameView");
 jest.mock("../../src/model/Ball");
 jest.mock("../../src/model/Paddle");
 
+class PaddleMock implements Paddle {
+  public paddleWidth = 75;
+  public paddleHeight = 10;
+  public paddleX = 0;
+  public paddleY = 0;
+  public canvasWidth: number = 448; // Coincide con 'Paddle'
+  public PADDLE_SENSITIVITY: number = 3;
+  public collisionRight: boolean = false;
+  public collisionLeft: boolean = false;
+
+  constructor(
+    paddleWidth: number,
+    paddleHeight: number,
+    paddleX: number,
+    paddleY: number
+  ) {
+    // do nothing
+  }
+
+  checkCollision() {
+    // do nothing
+  }
+
+  checkCollisionCanvasRight(): boolean {
+    return false;
+  }
+
+  checkCollisionCanvasLeft(): boolean {
+    return false;
+  }
+
+  move(rightPressed: boolean, leftPressed: boolean) {
+    return 0;
+  }
+}
+
+
 describe("GameController", () => {
   let gameViewMock: jest.Mocked<GameView>;
   let BallMock: jest.Mocked<Ball>;
-  let PaddleMock: jest.Mocked<Paddle>;
   let MapMock: jest.Mocked<Map>;
   let gameControllerMock: GameController;
-
   let mockCanvas: HTMLCanvasElement;
   let mockCtx: CanvasRenderingContext2D;
+  const paddleMock = new PaddleMock(0, 0, 0, 0);
 
   beforeEach(() => {
     mockCanvas = document.createElement("canvas");
@@ -55,14 +91,7 @@ describe("GameController", () => {
       checkCollision: jest.fn(),
     } as unknown as jest.Mocked<Ball>;
 
-    PaddleMock = {
-      x: 0,
-      y: 0,
-      width: 75,
-      height: 10,
-      dx: 0,
-      move: jest.fn(),
-    } as unknown as jest.Mocked<Paddle>;
+    
 
     MapMock = {
       bricks: [],
@@ -94,7 +123,7 @@ describe("GameController", () => {
     const renderSpy = jest.spyOn(gameViewMock, "render");
 
     // Renderizamos la escena
-    gameViewMock.render(BallMock, PaddleMock, MapMock);
+    gameViewMock.render(BallMock, paddleMock, MapMock);
     expect(renderSpy).toHaveBeenCalled();
   });
 

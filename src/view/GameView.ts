@@ -34,7 +34,9 @@ export class GameView {
     this.canvas.height = this.canvasHeight;
   }
 
-  render(ball: Ball, paddle: Paddle, map: Map): void {}
+  render(ball: Ball, paddle: Paddle, map: Map): void {
+    this.drawBall(ball);
+  }
 
   private drawBall(ball: Ball) {
     this.ctx.beginPath();

@@ -199,7 +199,9 @@ describe("GameView.drawMap() con mock del Map", () => {
       // Crear elementos mock para las dependencias
       canvas = document.createElement("canvas");
       ctx = canvas.getContext("2d")!;
-      gameView = new GameView(canvas, ctx);
+      let mockSprite = { src: "" } as HTMLImageElement;
+      let mockBricksSprite = { src: "" } as HTMLImageElement;
+      gameView = new GameView(canvas, ctx, mockSprite, mockBricksSprite);
 
       mockBall = {} as unknown as Ball;
 
@@ -251,10 +253,20 @@ describe("GameView.drawMap() con mock del Map", () => {
       mockScoreDiv.id = "score";
       document.body.appendChild(mockScoreDiv); // Agregarlo al DOM para pruebas
 
-      // Crear una instancia de GameView con el mock
+      // Crear una instancia de GameView sin acceso real al DOM
       const mockCanvas = document.createElement("canvas");
       const mockCtx = mockCanvas.getContext("2d")!;
-      gameView = new GameView(mockCanvas, mockCtx);
+
+      // Mockear las propiedades 'sprite' y 'bricksSprite' directamente
+      const mockSprite = { src: "" } as HTMLImageElement;
+      const mockBricksSprite = { src: "" } as HTMLImageElement;
+
+      gameView = new GameView(
+        mockCanvas,
+        mockCtx,
+        mockSprite,
+        mockBricksSprite
+      );
     });
 
     afterEach(() => {
@@ -262,12 +274,28 @@ describe("GameView.drawMap() con mock del Map", () => {
       document.body.innerHTML = "";
     });
 
-    it('debería actualizar el contenido del scoreDiv con el texto fijo "Score: 0"', () => {
-      // Llamar al método updateScore
-      gameView.updateScore();
+    it("debería actualizar el contenido del scoreDiv con el puntaje proporcionado", () => {
+      // Llamar al método con un puntaje de prueba
+      gameView.updateScore(10);
+
+      // Verificar si el innerHTML del scoreDiv se actualizó correctamente
+      expect(mockScoreDiv.innerHTML).toBe("Score: 10");
+    });
+
+    it("debería actualizar el contenido del scoreDiv con el puntaje de 0", () => {
+      // Llamar al método con un puntaje de 0
+      gameView.updateScore(0);
 
       // Verificar si el innerHTML del scoreDiv se actualizó correctamente
       expect(mockScoreDiv.innerHTML).toBe("Score: 0");
+    });
+
+    it("debería actualizar el contenido del scoreDiv con un puntaje negativo", () => {
+      // Llamar al método con un puntaje negativo
+      gameView.updateScore(-5);
+
+      // Verificar si el innerHTML del scoreDiv se actualizó correctamente
+      expect(mockScoreDiv.innerHTML).toBe("Score: -5");
     });
   });
 });

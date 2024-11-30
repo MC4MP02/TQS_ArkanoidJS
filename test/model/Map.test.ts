@@ -157,5 +157,59 @@ describe("Map", () => {
 
       jest.spyOn(global.Math, "random").mockRestore(); // Restaurar el comportamiento de Math.random
     });
+
+    describe("generateBricks - Loop Testing", () => {
+      beforeEach(() => {
+        map["brickWidth"] = 32;
+        map["brickHeigth"] = 16;
+        map["brickPadding"] = 2;
+        map["brickOffsetLeft"] = 10;
+        map["brickOffsetTop"] = 20;
+        map["BRICK_STATUS"] = { ALIVE: 1, DEAD: 0 };
+      });
+    
+      it("debería testear el bucle interno (r = 0,1,2,4,6,7) con c = 1", () => {
+        map["brickColumnCount"] = 2; // Dos columnas
+        map["brickRowCount"] = 8; // Ocho filas para probar los valores específicos
+    
+        map.generateBricks();
+    
+        const columnIndex = 1; // Fijamos c = 1
+        const rowsToTest = [0, 1, 2, 4, 6, 7];
+    
+        rowsToTest.forEach((rowIndex) => {
+          const brick = map["bricks"][columnIndex][rowIndex];
+          expect(brick).toBeInstanceOf(Brick);
+          expect(brick).toEqual(
+            expect.objectContaining({
+              BrickX: expect.any(Number),
+              BrickY: expect.any(Number),
+            })
+          );
+        });
+      });
+    
+      it("debería testear el bucle externo (c = 0,1,2,8,12,13) con r = 7", () => {
+        map["brickColumnCount"] = 14; // Catorce columnas para probar los valores específicos
+        map["brickRowCount"] = 8; // Ocho filas
+    
+        map.generateBricks();
+    
+        const rowIndex = 7; // Fijamos r = 7
+        const columnsToTest = [0, 1, 2, 8, 12, 13];
+    
+        columnsToTest.forEach((columnIndex) => {
+          const brick = map["bricks"][columnIndex][rowIndex];
+          expect(brick).toBeInstanceOf(Brick);
+          expect(brick).toEqual(
+            expect.objectContaining({
+              BrickX: expect.any(Number),
+              BrickY: expect.any(Number),
+            })
+          );
+        });
+      });
+    });
+    
   });
 });

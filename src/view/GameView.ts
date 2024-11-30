@@ -26,11 +26,20 @@ export class GameView {
     DEAD: 0,
   };
 
-  constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D,
+    sprite?: HTMLImageElement,
+    bricksSprite?: HTMLImageElement
+  ) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.sprite.src = "./assets/sprite.png";
+    /* this.sprite.src = "./assets/sprite.png"; */
     /* this.bricksSprite.src = "./assets/bricks.png"; */
+    this.sprite =
+      sprite || (document.querySelector("#sprite") as HTMLImageElement);
+    this.bricksSprite =
+      bricksSprite || (document.querySelector("#bricks") as HTMLImageElement);
   }
 
   loadCanvas() {
@@ -44,8 +53,8 @@ export class GameView {
     this.drawMap(map);
   }
 
-  updateScore() {
-    this.scoreDiv.innerHTML = "Score: 0";
+  updateScore(score: number) {
+    this.scoreDiv.innerHTML = `Score: ${score}`;
   }
 
   private drawBall(ball: Ball) {

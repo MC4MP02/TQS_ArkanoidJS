@@ -98,6 +98,13 @@ describe("GameController", () => {
     expect(renderSpy).toHaveBeenCalled();
   });
 
+  it("debería devolver la variable isRunning", () => {
+    gameControllerMock["isRunning"] = true;
+    expect(gameControllerMock.getIsRunning()).toBe(true);
+    gameControllerMock["isRunning"] = false;
+    expect(gameControllerMock.getIsRunning()).toBe(false);
+  });
+
   describe("initEvents", () => {
     let addEventListenerSpy: jest.SpyInstance;
 
@@ -262,7 +269,6 @@ describe("GameController", () => {
     let mockPaddle: jest.Mocked<Paddle>;
     let mockMap: jest.Mocked<Map>;
     let mockView: jest.Mocked<GameView>;
-    let reloadSpy: jest.SpyInstance;
 
     beforeEach(() => {
       mockBall = new Ball(0, 0, 0, 0, 0) as jest.Mocked<Ball>;
@@ -274,11 +280,6 @@ describe("GameController", () => {
       gameController["ball"] = mockBall;
       gameController["paddle"] = mockPaddle;
       gameController["map"] = mockMap;
-
-      // Mockear el método reloadPage
-      reloadSpy = jest
-        .spyOn(gameController as any, "reloadPage")
-        .mockImplementation(() => {});
     });
 
     afterEach(() => {
@@ -300,9 +301,6 @@ describe("GameController", () => {
       // Verificar que se detuvo el juego
       expect(gameController["isRunning"]).toBe(false);
       expect(gameController["startGame"]).toBe(false);
-
-      // Verificar que se llamó a reloadPage
-      expect(reloadSpy).toHaveBeenCalled();
     });
 
     it("no debería finalizar el juego ni recargar la página si la bola no se sale del mapa", () => {
@@ -320,9 +318,6 @@ describe("GameController", () => {
       // Verificar que no se cambió el estado del juego
       expect(gameController["isRunning"]).toBe(false); // No cambia porque el juego no estaba corriendo
       expect(gameController["startGame"]).toBe(false); // No cambia porque el juego no estaba iniciado
-
-      // Verificar que no se llamó a reloadPage
-      expect(reloadSpy).not.toHaveBeenCalled();
     });
 
     it("debería verificar la colisión en la Ball", () => {

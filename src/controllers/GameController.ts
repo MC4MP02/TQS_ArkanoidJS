@@ -68,17 +68,12 @@ export class GameController {
     }
   }
 
-  private reloadPage(): void {
-    document.location.reload();
-  }
-
   private checkCollisions() {
     //BALL COLLISION
     if (this.ball.ballDownMap(this.canvasHeight)) {
-      console.log("GAME OVER");
+      console.log("GAME OVER. REALOAD THE PAGE TO PLAY AGAIN.");
       this.isRunning = false;
       this.startGame = false;
-      this.reloadPage();
       return;
     }
 

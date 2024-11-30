@@ -14,6 +14,10 @@ export class GameView {
     "#bricks"
   ) as HTMLImageElement;
 
+  private scoreDiv: HTMLImageElement = document.querySelector(
+    "#score"
+  ) as HTMLImageElement;
+
   private canvasWidth: number = 448;
   private canvasHeight: number = 400;
 
@@ -38,6 +42,10 @@ export class GameView {
     this.drawBall(ball);
     this.drawPaddle(paddle);
     this.drawMap(map);
+  }
+
+  updateScore() {
+    this.scoreDiv.innerHTML = "Score: 0";
   }
 
   private drawBall(ball: Ball) {

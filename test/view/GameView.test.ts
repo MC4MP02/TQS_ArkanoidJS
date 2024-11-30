@@ -240,4 +240,34 @@ describe("GameView.drawMap() con mock del Map", () => {
       expect(drawMapSpy).toHaveBeenCalledWith(mockMap);
     });
   });
+
+  describe("updateScore", () => {
+    let gameView: GameView;
+    let mockScoreDiv: HTMLElement;
+
+    beforeEach(() => {
+      // Crear un mock del div del score
+      mockScoreDiv = document.createElement("div");
+      mockScoreDiv.id = "score";
+      document.body.appendChild(mockScoreDiv); // Agregarlo al DOM para pruebas
+
+      // Crear una instancia de GameView con el mock
+      const mockCanvas = document.createElement("canvas");
+      const mockCtx = mockCanvas.getContext("2d")!;
+      gameView = new GameView(mockCanvas, mockCtx);
+    });
+
+    afterEach(() => {
+      // Limpiar el DOM después de cada prueba
+      document.body.innerHTML = "";
+    });
+
+    it('debería actualizar el contenido del scoreDiv con el texto fijo "Score: 0"', () => {
+      // Llamar al método updateScore
+      gameView.updateScore();
+
+      // Verificar si el innerHTML del scoreDiv se actualizó correctamente
+      expect(mockScoreDiv.innerHTML).toBe("Score: 0");
+    });
+  });
 });

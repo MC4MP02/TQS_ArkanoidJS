@@ -36,6 +36,8 @@ export class GameView {
 
   render(ball: Ball, paddle: Paddle, map: Map): void {
     this.drawBall(ball);
+    this.drawPaddle(paddle);
+    this.drawMap(map);
   }
 
   private drawBall(ball: Ball) {

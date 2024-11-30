@@ -230,12 +230,28 @@ describe("GameController", () => {
       expect(gameController["rightPressed"]).toBe(false);
     });
 
+    it("no debería establecer rightPressed en false cuando no es 'ArrowRight'", () => {
+      gameController["rightPressed"] = true; // Simulamos que estaba presionado
+      const event = new KeyboardEvent("keyup", { key: "NotArrowRight" }); //Forzamos que la key === ArrowRight de false
+      gameController["keyUpHandler"](event);
+
+      expect(gameController["rightPressed"]).not.toBe(false);
+    });
+
     it("debería establecer rightPressed en false cuando se suelta 'Right'", () => {
       gameController["rightPressed"] = true; // Simulamos que estaba presionado
       const event = new KeyboardEvent("keyup", { key: "Right" });
       gameController["keyUpHandler"](event);
 
       expect(gameController["rightPressed"]).toBe(false);
+    });
+
+    it("no debería establecer rightPressed en false cuando no es 'Right'", () => {
+      gameController["rightPressed"] = true; // Simulamos que estaba presionado
+      const event = new KeyboardEvent("keyup", { key: "NotRight" }); //Forzamos que la key === Right de false
+      gameController["keyUpHandler"](event);
+
+      expect(gameController["rightPressed"]).not.toBe(false);
     });
 
     it("debería establecer leftPressed en false cuando se suelta 'ArrowLeft'", () => {
@@ -246,12 +262,28 @@ describe("GameController", () => {
       expect(gameController["leftPressed"]).toBe(false);
     });
 
+    it("no debería establecer leftPressed en false cuando no es 'ArrowLeft'", () => {
+      gameController["leftPressed"] = true; // Simulamos que estaba presionado
+      const event = new KeyboardEvent("keyup", { key: "NotArrowLeft" });  //Forzamos que la key === ArrowLeft de false
+      gameController["keyUpHandler"](event);
+
+      expect(gameController["leftPressed"]).not.toBe(false);
+    });
+
     it("debería establecer leftPressed en false cuando se suelta 'Left'", () => {
       gameController["leftPressed"] = true; // Simulamos que estaba presionado
       const event = new KeyboardEvent("keyup", { key: "Left" });
       gameController["keyUpHandler"](event);
 
       expect(gameController["leftPressed"]).toBe(false);
+    });
+
+    it("no debería establecer leftPressed en false cuando no es 'Left'", () => {
+      gameController["leftPressed"] = true; // Simulamos que estaba presionado
+      const event = new KeyboardEvent("keyup", { key: "NotLeft" }); //Forzamos que la key === Left de false
+      gameController["keyUpHandler"](event);
+
+      expect(gameController["leftPressed"]).not.toBe(false);
     });
 
     it("no debería cambiar propiedades para teclas irrelevantes", () => {

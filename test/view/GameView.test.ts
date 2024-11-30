@@ -186,4 +186,43 @@ describe("GameView.drawMap() con mock del Map", () => {
     // Verificamos que no se llamó a drawImage
     expect(ctx.drawImage).not.toHaveBeenCalled();
   });
+
+  describe("render", () => {
+    let canvas: HTMLCanvasElement;
+    let ctx: CanvasRenderingContext2D;
+    let gameView: GameView;
+    let mockBall: Ball;
+    let mockPaddle: Paddle;
+    let mockMap: Map;
+
+    beforeEach(() => {
+      // Crear elementos mock para las dependencias
+      canvas = document.createElement("canvas");
+      ctx = canvas.getContext("2d")!;
+      gameView = new GameView(canvas, ctx);
+
+      mockBall = {} as unknown as Ball;
+
+      mockPaddle = {} as unknown as Paddle;
+
+      mockMap = {
+        getBricks: jest.fn().mockReturnValue([]), // Mock de la funciongetBricks
+        getBrickWidth: jest.fn().mockReturnValue(50), // Mock de la función getBrickWidth
+        getBrickHeigth: jest.fn().mockReturnValue(20), // Mock de la función getBrickHeigth
+        getBrickColumnCount: jest.fn().mockReturnValue(5), // Mock de la función getBrickColumnCount
+        getBrickRowCount: jest.fn().mockReturnValue(5), // Mock de la funcion getBrickRowCount
+      } as unknown as Map;
+    });
+
+    it("debería llamar a drawBall cuando render es llamado", () => {
+      // Espiar los métodos internos
+      const drawBallSpy = jest.spyOn(gameView as any, "drawBall");
+
+      // Llamar a la función que se va a probar
+      gameView.render(mockBall, mockPaddle, mockMap);
+
+      // Verificar que las funciones internas fueron llamadas
+      expect(drawBallSpy).toHaveBeenCalledWith(mockBall);
+    });
+  });
 });

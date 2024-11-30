@@ -224,5 +224,20 @@ describe("GameView.drawMap() con mock del Map", () => {
       // Verificar que las funciones internas fueron llamadas
       expect(drawBallSpy).toHaveBeenCalledWith(mockBall);
     });
+
+    it("debería llamar a drawBall, drawPaddle y drawMap cuando render es llamado", () => {
+      // Espiar los métodos internos
+      const drawBallSpy = jest.spyOn(gameView as any, "drawBall");
+      const drawPaddleSpy = jest.spyOn(gameView as any, "drawPaddle");
+      const drawMapSpy = jest.spyOn(gameView as any, "drawMap");
+
+      // Llamar a la función que se va a probar
+      gameView.render(mockBall, mockPaddle, mockMap);
+
+      // Verificar que las funciones internas fueron llamadas
+      expect(drawBallSpy).toHaveBeenCalledWith(mockBall);
+      expect(drawPaddleSpy).toHaveBeenCalledWith(mockPaddle);
+      expect(drawMapSpy).toHaveBeenCalledWith(mockMap);
+    });
   });
 });

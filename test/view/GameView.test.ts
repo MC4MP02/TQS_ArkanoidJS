@@ -4,73 +4,80 @@ import { GameView } from "../../src/view/GameView";
 import { Map } from "../../src/model/Map";
 import { Brick } from "../../src/model/Brick";
 
-/* jest.mock("../../src/view/GameView.ts"); */
-
+// Mock de la clase Ball
 describe("GameView", () => {
-  let mockCanvas: HTMLCanvasElement;
-  let mockCtx: CanvasRenderingContext2D;
-  let gameView: GameView;
+  let mockCanvas: HTMLCanvasElement; // Mock del canvas
+  let mockCtx: CanvasRenderingContext2D; // Mock del contexto de dibujo
+  let gameView: GameView; // Instancia de GameView
 
-  let mockWidth = 448;
-  let mockHeight = 400;
+  let mockWidth = 448; // Ancho del canvas
+  let mockHeight = 400; // Alto del canvas
 
-  let paddleWidth = 50;
-  let paddleHeight = 10;
-  let paddleX = (mockWidth - paddleWidth) / 2;
-  let paddleY = mockHeight - paddleHeight - 20;
+  let paddleWidth = 50; // Ancho del paddle
+  let paddleHeight = 10; // Alto del paddle
+  let paddleX = (mockWidth - paddleWidth) / 2; // Posición X del paddle
+  let paddleY = mockHeight - paddleHeight - 20; // Posición Y del paddle
 
+  // Configuración inicial
   beforeEach(() => {
-    mockCanvas = document.createElement("canvas");
+    mockCanvas = document.createElement("canvas"); // Crear un canvas
+    // Mock del contexto de dibujo
     mockCtx = {
-      beginPath: jest.fn(),
-      arc: jest.fn(),
-      fill: jest.fn(),
-      closePath: jest.fn(),
-      clearRect: jest.fn(),
-      drawImage: jest.fn(),
-    } as unknown as CanvasRenderingContext2D;
+      beginPath: jest.fn(), // Mock automatico de beginPath
+      arc: jest.fn(), // Mock automatico de arc
+      fill: jest.fn(), // Mock automatico de fill
+      closePath: jest.fn(), // Mock automatico de closePath
+      clearRect: jest.fn(), // Mock automatico de clearRect
+      drawImage: jest.fn(), // Mock automatico de drawImage
+    } as unknown as CanvasRenderingContext2D; // Conversión a tipo CanvasRenderingContext2D
 
-    const mockSprite = document.createElement("img");
+    const mockSprite = document.createElement("img"); // Crear un elemento img
     mockSprite.id = "sprite";
-    document.body.appendChild(mockSprite);
+    document.body.appendChild(mockSprite); // Agregarlo al DOM
 
-    gameView = new GameView(mockCanvas, mockCtx);
+    gameView = new GameView(mockCanvas, mockCtx); // Crear una instancia de GameView
 
-    gameView["sprite"] = mockSprite;
+    gameView["sprite"] = mockSprite; // Asignar el mock de sprite a la instancia
   });
 
+  // Test de la creación de la instancia
   it("debería crear una instancia de GameView", () => {
     expect(gameView).toBeInstanceOf(GameView);
   });
 
+  // Test de la inicialización del canvas
   it("debería inicializar el canvas con el tamaño correcto", () => {
     gameView.loadCanvas();
     expect(mockCanvas.width).toBe(mockWidth);
     expect(mockCanvas.height).toBe(mockHeight);
   });
 
+  // Test de la función render
   it("debería dibujar la bola en el canvas", () => {
     gameView.loadCanvas();
 
     const ball = new Ball(50, 50, 10, 2, 2);
 
-    gameView["drawBall"](ball);
+    gameView["drawBall"](ball); // Llamar al método drawBall
 
+    // Verificar que se llamaron los métodos
     expect(mockCtx.beginPath).toHaveBeenCalled();
     expect(mockCtx.arc).toHaveBeenCalledWith(50, 50, 10, 0, Math.PI * 2);
     expect(mockCtx.fill).toHaveBeenCalled();
     expect(mockCtx.closePath).toHaveBeenCalled();
   });
 
+  // Test de la función drawPaddle
   it("debería dibujar el paddle en el canvas", () => {
     gameView.loadCanvas();
 
-    const paddle = new Paddle(paddleWidth, paddleHeight, paddleX, paddleY);
+    const paddle = new Paddle(paddleWidth, paddleHeight, paddleX, paddleY); // Crear un paddle
 
-    gameView["drawPaddle"](paddle);
+    gameView["drawPaddle"](paddle); // Llamar al método drawPaddle
 
-    expect(mockCtx.drawImage).toHaveBeenCalled();
+    expect(mockCtx.drawImage).toHaveBeenCalled(); // Verificar que se llamó a drawImage
     expect(mockCtx.drawImage).toHaveBeenCalledWith(
+      // Verificar los argumentos de drawImage
       expect.any(HTMLImageElement),
       29,
       174,
@@ -83,6 +90,7 @@ describe("GameView", () => {
     );
   });
 
+  // Test de la función clearCanvas
   it("debería limpiar el canvas", () => {
     gameView.clearCanvas();
 
@@ -102,7 +110,8 @@ describe("GameView.drawMap() con mock del Map", () => {
   beforeEach(() => {
     canvas = document.createElement("canvas");
     ctx = {
-      beginPath: jest.fn(),
+      // Mock del contexto de dibujo
+      beginPath: jest.fn(), // Mock automatico de beginPath
       arc: jest.fn(),
       fill: jest.fn(),
       closePath: jest.fn(),
@@ -118,6 +127,7 @@ describe("GameView.drawMap() con mock del Map", () => {
     jest.spyOn(ctx, "clearRect").mockImplementation(jest.fn());
 
     mockMap = {
+      // Mock del Map
       getBricks: jest.fn(),
       getBrickColumnCount: jest.fn(),
       getBrickRowCount: jest.fn(),
@@ -140,8 +150,9 @@ describe("GameView.drawMap() con mock del Map", () => {
     ]);
   });
 
+  // Test de la función drawMap
   it("debería dibujar solo los ladrillos con estado ALIVE", () => {
-    gameView["drawMap"](mockMap as Map);
+    gameView["drawMap"](mockMap as Map); // Llamar al método drawMap
 
     // Comprobamos llamadas a drawImage solo para ladrillos ALIVE
     expect(ctx.drawImage).toHaveBeenCalledTimes(4); // Solo ladrillos vivos en el mock
@@ -159,14 +170,16 @@ describe("GameView.drawMap() con mock del Map", () => {
   });
 
   it("no debería dibujar ladrillos con estado DEAD", () => {
-    gameView["drawMap"](mockMap as Map);
+    gameView["drawMap"](mockMap as Map); // Llamar al método drawMap
 
-    const bricks = (mockMap.getBricks as jest.Mock).mock.results[0].value;
+    const bricks = (mockMap.getBricks as jest.Mock).mock.results[0].value; // Obtener los ladrillos
+    // Obtener las coordenadas de los ladrillos en las llamadas a drawImage
     const calledCoords = (ctx.drawImage as jest.Mock).mock.calls.map((args) => [
       args[4],
       args[5],
     ]);
 
+    // Verificar que no se dibujaron ladrillos muertos
     bricks.forEach((col: Brick[], colIndex: number) => {
       col.forEach((brick: Brick, rowIndex: number) => {
         if (brick.status === 0) {
@@ -177,11 +190,12 @@ describe("GameView.drawMap() con mock del Map", () => {
     });
   });
 
+  // Test de la función drawMap con ladrillos fuera del canvas
   it("debería manejar un array vacio de ladrillos correctamente", () => {
     // Configuramos el mock para devolver un array vacio
     (mockMap.getBricks as jest.Mock).mockReturnValue([]);
 
-    gameView["drawMap"](mockMap as Map);
+    gameView["drawMap"](mockMap as Map); // Llamar al método drawMap
 
     // Verificamos que no se llamó a drawImage
     expect(ctx.drawImage).not.toHaveBeenCalled();
@@ -198,14 +212,14 @@ describe("GameView.drawMap() con mock del Map", () => {
     beforeEach(() => {
       // Crear elementos mock para las dependencias
       canvas = document.createElement("canvas");
-      ctx = canvas.getContext("2d")!;
-      let mockSprite = { src: "" } as HTMLImageElement;
-      let mockBricksSprite = { src: "" } as HTMLImageElement;
-      gameView = new GameView(canvas, ctx, mockSprite, mockBricksSprite);
+      ctx = canvas.getContext("2d")!; // Obtener el contexto de dibujo
+      let mockSprite = { src: "" } as HTMLImageElement; // Mock del sprite
+      let mockBricksSprite = { src: "" } as HTMLImageElement; // Mock del sprite de ladrillos
+      gameView = new GameView(canvas, ctx, mockSprite, mockBricksSprite); // Crear una instancia de GameView
 
-      mockBall = {} as unknown as Ball;
+      mockBall = {} as unknown as Ball; // Mock vacio de la bola
 
-      mockPaddle = {} as unknown as Paddle;
+      mockPaddle = {} as unknown as Paddle; // Mock vacio de la paleta
 
       mockMap = {
         getBricks: jest.fn().mockReturnValue([]), // Mock de la funciongetBricks
@@ -229,9 +243,9 @@ describe("GameView.drawMap() con mock del Map", () => {
 
     it("debería llamar a drawBall, drawPaddle y drawMap cuando render es llamado", () => {
       // Espiar los métodos internos
-      const drawBallSpy = jest.spyOn(gameView as any, "drawBall");
-      const drawPaddleSpy = jest.spyOn(gameView as any, "drawPaddle");
-      const drawMapSpy = jest.spyOn(gameView as any, "drawMap");
+      const drawBallSpy = jest.spyOn(gameView as any, "drawBall"); // Espiar drawBall
+      const drawPaddleSpy = jest.spyOn(gameView as any, "drawPaddle"); // Espiar drawPaddle
+      const drawMapSpy = jest.spyOn(gameView as any, "drawMap"); // Espiar drawMap
 
       // Llamar a la función que se va a probar
       gameView.render(mockBall, mockPaddle, mockMap);
@@ -250,7 +264,7 @@ describe("GameView.drawMap() con mock del Map", () => {
     beforeEach(() => {
       // Crear un mock del div del score
       mockScoreDiv = document.createElement("div");
-      mockScoreDiv.id = "score";
+      mockScoreDiv.id = "score"; // Asignar un id
       document.body.appendChild(mockScoreDiv); // Agregarlo al DOM para pruebas
 
       // Crear una instancia de GameView sin acceso real al DOM
@@ -261,7 +275,7 @@ describe("GameView.drawMap() con mock del Map", () => {
       const mockSprite = { src: "" } as HTMLImageElement;
       const mockBricksSprite = { src: "" } as HTMLImageElement;
 
-      gameView = new GameView(
+      gameView = new GameView( // Crear una instancia de GameView
         mockCanvas,
         mockCtx,
         mockSprite,
@@ -310,6 +324,7 @@ describe("GameView.drawMap() con mock del Map", () => {
     let gameView: GameView;
 
     beforeEach(() => {
+      // Configuración inicial
       const mockCanvas = document.createElement("canvas");
       mockCtx = {
         beginPath: jest.fn(),
@@ -401,21 +416,50 @@ describe("GameView.drawMap() con mock del Map", () => {
         const paddle = new Paddle(100, 10, 50, 390); // Paddle completamente dentro
         gameView["drawPaddle"](paddle);
         expect(mockCtx.drawImage).toHaveBeenCalledWith(
-          gameView["sprite"],29,174,100,10,50,390,100,10);
+          // Verificar que se llamó a drawImage
+          gameView["sprite"],
+          29,
+          174,
+          100,
+          10,
+          50,
+          390,
+          100,
+          10
+        );
       });
 
       it("Debería dibujar el paddle parcialmente fuera del canvas", () => {
         const paddle = new Paddle(100, 10, -10, 390); // Parte del paddle fuera
         gameView["drawPaddle"](paddle);
         expect(mockCtx.drawImage).toHaveBeenCalledWith(
-          gameView["sprite"],29,174,100,10,-10,390,100,10);
+          // Verificar que se llamó a drawImage
+          gameView["sprite"],
+          29,
+          174,
+          100,
+          10,
+          -10,
+          390,
+          100,
+          10
+        );
       });
 
       it("Debería dibujar el paddle completamente fuera del canvas", () => {
         const paddle = new Paddle(100, 10, -200, 390); // Paddle completamente fuera
         gameView["drawPaddle"](paddle);
         expect(mockCtx.drawImage).toHaveBeenCalledWith(
-          gameView["sprite"],29,174,100,10,-200,390,100,10);
+          gameView["sprite"],
+          29,
+          174,
+          100,
+          10,
+          -200,
+          390,
+          100,
+          10
+        );
       });
     });
 
@@ -425,21 +469,51 @@ describe("GameView.drawMap() con mock del Map", () => {
           const paddle = new Paddle(50, 10, 0, 390); // paddleX = 0
           gameView["drawPaddle"](paddle);
           expect(mockCtx.drawImage).toHaveBeenCalledWith(
-            gameView["sprite"],29,174,50,10,0,390,50,10);
+            // Verificar que se llamó a drawImage
+            gameView["sprite"],
+            29,
+            174,
+            50,
+            10,
+            0,
+            390,
+            50,
+            10
+          );
         });
 
         it("Debería dibujar el paddle fuera del canvas (límite inferior izquierdo)", () => {
           const paddle = new Paddle(50, 10, -1, 390); // paddleX < 0
           gameView["drawPaddle"](paddle);
           expect(mockCtx.drawImage).toHaveBeenCalledWith(
-            gameView["sprite"],29,174,50,10,-1,390,50,10);
+            // Verificar que se llamó a drawImage
+            gameView["sprite"],
+            29,
+            174,
+            50,
+            10,
+            -1,
+            390,
+            50,
+            10
+          );
         });
 
         it("Debería dibujar el paddle dentro del canvas (límite superior izquierdo)", () => {
           const paddle = new Paddle(50, 10, 1, 390); // paddleX > 0
           gameView["drawPaddle"](paddle);
           expect(mockCtx.drawImage).toHaveBeenCalledWith(
-            gameView["sprite"],29,174,50,10,1,390,50,10);
+            // Verificar que se llamó a drawImage
+            gameView["sprite"],
+            29,
+            174,
+            50,
+            10,
+            1,
+            390,
+            50,
+            10
+          );
         });
       });
 
@@ -448,21 +522,49 @@ describe("GameView.drawMap() con mock del Map", () => {
           const paddle = new Paddle(50, 10, 398, 390); // paddleX + paddleWidth = canvasWidth
           gameView["drawPaddle"](paddle);
           expect(mockCtx.drawImage).toHaveBeenCalledWith(
-            gameView["sprite"],29,174,50,10,398,390,50,10);
+            // Verificar que se llamó a drawImage
+            gameView["sprite"],
+            29,
+            174,
+            50,
+            10,
+            398,
+            390,
+            50,
+            10
+          );
         });
 
         it("Debería dibujar el paddle dentro del canvas (límite inferior derecho)", () => {
           const paddle = new Paddle(50, 10, 397, 390); // paddleX + paddleWidth < canvasWidth
           gameView["drawPaddle"](paddle);
           expect(mockCtx.drawImage).toHaveBeenCalledWith(
-            gameView["sprite"],29,174,50,10,397,390,50,10);
+            gameView["sprite"],
+            29,
+            174,
+            50,
+            10,
+            397,
+            390,
+            50,
+            10
+          );
         });
 
         it("Debería dibujar el paddle fuera del canvas (límite superior derecho)", () => {
           const paddle = new Paddle(50, 10, 399, 390); // paddleX + paddleWidth > canvasWidth
           gameView["drawPaddle"](paddle);
           expect(mockCtx.drawImage).toHaveBeenCalledWith(
-            gameView["sprite"],29,174,50,10,399,390,50,10);
+            gameView["sprite"],
+            29,
+            174,
+            50,
+            10,
+            399,
+            390,
+            50,
+            10
+          );
         });
       });
     });
@@ -473,6 +575,7 @@ describe("GameView.drawMap() con mock del Map", () => {
     let mockScoreDiv: HTMLElement;
 
     beforeEach(() => {
+      // Configuración inicial
       mockScoreDiv = document.createElement("div");
       mockScoreDiv.id = "score";
       document.body.appendChild(mockScoreDiv);
@@ -483,22 +586,22 @@ describe("GameView.drawMap() con mock del Map", () => {
     });
 
     afterEach(() => {
-      document.body.innerHTML = "";
+      document.body.innerHTML = ""; // Limpiar el DOM después de cada prueba
     });
 
     it("Debería actualizar el puntaje a un valor positivo", () => {
       gameView.updateScore(100);
-      expect(mockScoreDiv.innerHTML).toBe("Score: 100");
+      expect(mockScoreDiv.innerHTML).toBe("Score: 100"); // Verificar el valor del scoreDiv
     });
 
     it("Debería actualizar el puntaje a un valor negativo", () => {
       gameView.updateScore(-50);
-      expect(mockScoreDiv.innerHTML).toBe("Score: -50");
+      expect(mockScoreDiv.innerHTML).toBe("Score: -50"); // Verificar el valor del scoreDiv
     });
 
     it("Debería actualizar el puntaje a cero", () => {
       gameView.updateScore(0);
-      expect(mockScoreDiv.innerHTML).toBe("Score: 0");
+      expect(mockScoreDiv.innerHTML).toBe("Score: 0"); // Verificar el valor del scoreDiv
     });
   });
 });

@@ -54,9 +54,13 @@ export class GameController {
     }
   }
 
-  private ballMove() {}
+  private ballMove() {
+    this.ball.move();
+  }
 
-  private paddleMove() {}
+  private paddleMove() {
+    this.paddle.move(this.rightPressed, this.leftPressed);
+  }
 
   public getIsRunning() {
     return this.isRunning;

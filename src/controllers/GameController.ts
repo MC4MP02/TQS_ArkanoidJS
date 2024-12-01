@@ -10,6 +10,7 @@ export class GameController {
   private rightPressed: boolean = false;
   private leftPressed: boolean = false;
   private startGame: boolean = false;
+  private isTesting: boolean = false;
 
   private ball: Ball;
   private paddle: Paddle;
@@ -33,8 +34,23 @@ export class GameController {
 
   private gameLoop() {
     if (this.startGame && this.isRunning) {
+      // Limpiar el canvas
       this.view.clearCanvas();
+
+      // Renderizar el juego
       this.view.render(this.ball, this.paddle, this.map);
+
+      // Verificar colisiones y mover objetos
+      this.checkCollisions();
+      this.ballMove();
+      this.paddleMove();
+
+      // Continuar el bucle del juego si sigue ejecutándose
+      if (!this.isTesting) {
+        if (this.isRunning) {
+          window.requestAnimationFrame(this.gameLoop.bind(this));
+        }
+      }
     }
   }
 

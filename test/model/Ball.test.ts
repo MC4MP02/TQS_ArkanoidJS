@@ -10,6 +10,7 @@ describe("Ball", () => {
 
   describe("constructor", () => {
     it("debería inicializar las propiedades correctamente", () => {
+      // Comprueba que las propiedades de la bola se inicializan correctamente
       expect(ball.x).toBe(100);
       expect(ball.y).toBe(100);
       expect(ball.radius).toBe(10);
@@ -20,6 +21,7 @@ describe("Ball", () => {
 
   describe("changeX", () => {
     it("debería cambiar la dirección de speedX y actualizar la posición X", () => {
+      // Verifica que `changeX` invierte la velocidad en el eje X y actualiza la posición
       const initialX = ball.x;
       ball.changeX();
       expect(ball.speedX).toBe(-5); // Debe invertir la velocidad
@@ -29,6 +31,7 @@ describe("Ball", () => {
 
   describe("changeY", () => {
     it("debería cambiar la dirección de speedY y actualizar la posición Y", () => {
+      // Verifica que `changeY` invierte la velocidad en el eje Y y actualiza la posición
       const initialY = ball.y;
       ball.changeY();
       expect(ball.speedY).toBe(-5); // Debe invertir la velocidad
@@ -38,18 +41,21 @@ describe("Ball", () => {
 
   describe("move", () => {
     it("debería actualizar la posición de la bola según speedX y speedY", () => {
+      // Comprueba que `move` actualiza correctamente las posiciones X e Y
       ball.move();
       expect(ball.x).toBe(105); // 100 + 5
       expect(ball.y).toBe(105); // 100 + 5
     });
 
     it("debería invertir speedY al colisionar con la pala", () => {
+      // Simula una colisión con la pala y verifica que invierte speedY
       ball["collisionPaddle"] = true; // Simulamos una colisión
       ball.move();
       expect(ball.y).toBe(95); // Debe moverse hacia abajo
     });
 
     it("debería invertir speedX al colisionar con el canvas X", () => {
+      // Simula una colisión con el borde del canvas en el eje X
       ball.x = 490; // Simulamos que la bola está cerca del borde derecho
       ball["collisionCanvasX"] = true; // Simulamos una colisión
       ball.move();
@@ -57,6 +63,7 @@ describe("Ball", () => {
     });
 
     it("debería invertir speedY al colisionar con el canvas Y", () => {
+      // Simula una colisión con el borde del canvas en el eje Y
       ball.y = 5; // Simulamos que la bola está cerca del borde superior
       ball["collisionCanvasY"] = true; // Simulamos una colisión
       ball.move();
@@ -66,6 +73,7 @@ describe("Ball", () => {
 
   describe("checkCollisionPaddle", () => {
     it("Debería detectar una colisión cuando el objeto está en el rango de x e y del paddle", () => {
+      // Comprueba que se detecta colisión cuando la bola está dentro del rango del paddle
       ball.x = 45;
       ball.speedX = 5;
       ball.y = 85;
@@ -76,6 +84,7 @@ describe("Ball", () => {
     });
 
     it("No debería detectar colisión cuando el objeto no está en el rango de y del paddle", () => {
+      // Verifica que no detecta colisión si está fuera del rango en Y
       ball.x = 45;
       ball.speedX = 5;
       ball.y = 200;
@@ -86,6 +95,7 @@ describe("Ball", () => {
     });
 
     it("No debería detectar colisión cuando el objeto no está en el rango de x del paddle", () => {
+      // Verifica que no detecta colisión si está fuera del rango en X
       ball.x = 10;
       ball.speedX = 5;
       ball.y = 95;
@@ -98,6 +108,7 @@ describe("Ball", () => {
 
   describe("checkCollisionCanvasX", () => {
     it("Debería detectar una colisión en el borde izquierdo del canvas", () => {
+      // Verifica que detecta colisión en el borde izquierdo
       ball.x = 5;
       ball.speedX = -10;
       ball.radius = 10;
@@ -107,6 +118,7 @@ describe("Ball", () => {
     });
 
     it("Debería detectar una colisión en el borde derecho del canvas", () => {
+      // Verifica que detecta colisión en el borde derecho
       ball.x = 390;
       ball.speedX = 15;
       ball.radius = 10;
@@ -116,6 +128,7 @@ describe("Ball", () => {
     });
 
     it("No debería detectar colisión cuando el objeto está dentro del canvas", () => {
+      // Verifica que dno etecta colisión dentro del canvas
       ball.x = 200;
       ball.speedX = 5;
       ball.radius = 10;
@@ -127,6 +140,7 @@ describe("Ball", () => {
 
   describe("checkCollisionCanvasY ", () => {
     it("Debería detectar una colisión en el borde superior del canvas", () => {
+      // Verifica que detecta colisión en el borde superior
       ball.y = 5;
       ball.speedY = -10;
       ball.radius = 10;
@@ -136,6 +150,7 @@ describe("Ball", () => {
     });
 
     it("Debería detectar una colisión en el borde inferior del canvas", () => {
+      // Verifica que detecta colisión en el borde inferior
       ball.y = 290;
       ball.speedY = 15;
       ball.radius = 10;
@@ -145,6 +160,7 @@ describe("Ball", () => {
     });
 
     it("No debería detectar colisión cuando el objeto está dentro del canvas", () => {
+      // Verifica que no detecta colisión dentro del canvas
       ball.y = 150;
       ball.speedY = 5;
       ball.radius = 10;

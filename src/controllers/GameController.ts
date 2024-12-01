@@ -166,6 +166,7 @@ export class GameController {
           currentBrick.hit();
           this.score += 100;
           this.view.updateScore(this.score);
+          this.ball.changeY();
         }
       }
     }

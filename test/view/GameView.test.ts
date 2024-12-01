@@ -298,4 +298,207 @@ describe("GameView.drawMap() con mock del Map", () => {
       expect(mockScoreDiv.innerHTML).toBe("Score: -5");
     });
   });
+
+  //-------------------------------------------------------------------------------------------------------------
+  //-------------------- TESTS PARTICIONES EQUIVALENTES, VALORES LÍMITE Y VALORES FRONTERA ----------------------
+  //-------------------------------------------------------------------------------------------------------------
+
+  describe("GameView.drawBall() - particiones, fronteras y límites", () => {
+    const canvasWidth = 448;
+    const canvasHeight = 400;
+    let mockCtx: CanvasRenderingContext2D;
+    let gameView: GameView;
+
+    beforeEach(() => {
+      const mockCanvas = document.createElement("canvas");
+      mockCtx = {
+        beginPath: jest.fn(),
+        arc: jest.fn(),
+        fill: jest.fn(),
+        closePath: jest.fn(),
+      } as unknown as CanvasRenderingContext2D;
+      gameView = new GameView(mockCanvas, mockCtx);
+    });
+
+    describe("Particiones equivalentes", () => {
+      it("Debería dibujar la bola dentro del canvas", () => {
+        const ball = new Ball(200, 200, 10, 0, 0); // Bola completamente dentro
+        gameView["drawBall"](ball);
+        expect(mockCtx.arc).toHaveBeenCalledWith(200, 200, 10, 0, Math.PI * 2);
+        expect(mockCtx.fill).toHaveBeenCalled();
+      });
+
+      it("Debería dibujar la bola parcialmente fuera del canvas", () => {
+        const ball = new Ball(5, 200, 10, 0, 0); // Parte del círculo fuera
+        gameView["drawBall"](ball);
+        expect(mockCtx.arc).toHaveBeenCalledWith(5, 200, 10, 0, Math.PI * 2);
+        expect(mockCtx.fill).toHaveBeenCalled();
+      });
+
+      it("Debería dibujar la bola completamente fuera del canvas", () => {
+        const ball = new Ball(-10, -10, 10, 0, 0); // Bola completamente fuera
+        gameView["drawBall"](ball);
+        expect(mockCtx.arc).toHaveBeenCalledWith(-10, -10, 10, 0, Math.PI * 2);
+        expect(mockCtx.fill).toHaveBeenCalled();
+      });
+    });
+
+    describe("Fronteras y límites", () => {
+      it("Debería dibujar la bola en la frontera del borde izquierdo", () => {
+        const ball = new Ball(10, 200, 10, 0, 0); // x - radius = 0
+        gameView["drawBall"](ball);
+        expect(mockCtx.arc).toHaveBeenCalledWith(10, 200, 10, 0, Math.PI * 2);
+      });
+
+      it("Debería dibujar la bola en el límite inferior del borde izquierdo", () => {
+        const ball = new Ball(9, 200, 10, 0, 0); // x - radius < 0
+        gameView["drawBall"](ball);
+        expect(mockCtx.arc).toHaveBeenCalledWith(9, 200, 10, 0, Math.PI * 2);
+      });
+
+      it("Debería dibujar la bola en el límite superior del borde izquierdo", () => {
+        const ball = new Ball(11, 200, 10, 0, 0); // x - radius > 0
+        gameView["drawBall"](ball);
+        expect(mockCtx.arc).toHaveBeenCalledWith(11, 200, 10, 0, Math.PI * 2);
+      });
+
+      it("Debería dibujar la bola en la frontera del borde derecho", () => {
+        const ball = new Ball(438, 200, 10, 0, 0); // x + radius = canvasWidth
+        gameView["drawBall"](ball);
+        expect(mockCtx.arc).toHaveBeenCalledWith(438, 200, 10, 0, Math.PI * 2);
+      });
+
+      it("Debería dibujar la bola en el límite inferior del borde derecho", () => {
+        const ball = new Ball(437, 200, 10, 0, 0); // x + radius < canvasWidth
+        gameView["drawBall"](ball);
+        expect(mockCtx.arc).toHaveBeenCalledWith(437, 200, 10, 0, Math.PI * 2);
+      });
+
+      it("Debería dibujar la bola en el límite superior del borde derecho", () => {
+        const ball = new Ball(439, 200, 10, 0, 0); // x + radius > canvasWidth
+        gameView["drawBall"](ball);
+        expect(mockCtx.arc).toHaveBeenCalledWith(439, 200, 10, 0, Math.PI * 2);
+      });
+    });
+  });
+
+  describe("GameView.drawPaddle() - particiones, fronteras y límites", () => {
+    const canvasWidth = 448;
+    const canvasHeight = 400;
+    let mockCtx: CanvasRenderingContext2D;
+    let gameView: GameView;
+
+    beforeEach(() => {
+      const mockCanvas = document.createElement("canvas");
+      mockCtx = {
+        drawImage: jest.fn(),
+      } as unknown as CanvasRenderingContext2D;
+      gameView = new GameView(mockCanvas, mockCtx);
+    });
+
+    describe("Particiones equivalentes", () => {
+      it("Debería dibujar el paddle completamente dentro del canvas", () => {
+        const paddle = new Paddle(100, 10, 50, 390); // Paddle completamente dentro
+        gameView["drawPaddle"](paddle);
+        expect(mockCtx.drawImage).toHaveBeenCalledWith(
+          gameView["sprite"],29,174,100,10,50,390,100,10);
+      });
+
+      it("Debería dibujar el paddle parcialmente fuera del canvas", () => {
+        const paddle = new Paddle(100, 10, -10, 390); // Parte del paddle fuera
+        gameView["drawPaddle"](paddle);
+        expect(mockCtx.drawImage).toHaveBeenCalledWith(
+          gameView["sprite"],29,174,100,10,-10,390,100,10);
+      });
+
+      it("Debería dibujar el paddle completamente fuera del canvas", () => {
+        const paddle = new Paddle(100, 10, -200, 390); // Paddle completamente fuera
+        gameView["drawPaddle"](paddle);
+        expect(mockCtx.drawImage).toHaveBeenCalledWith(
+          gameView["sprite"],29,174,100,10,-200,390,100,10);
+      });
+    });
+
+    describe("Fronteras y límites", () => {
+      describe("Borde izquierdo", () => {
+        it("Debería dibujar el paddle en la frontera izquierda del canvas", () => {
+          const paddle = new Paddle(50, 10, 0, 390); // paddleX = 0
+          gameView["drawPaddle"](paddle);
+          expect(mockCtx.drawImage).toHaveBeenCalledWith(
+            gameView["sprite"],29,174,50,10,0,390,50,10);
+        });
+
+        it("Debería dibujar el paddle fuera del canvas (límite inferior izquierdo)", () => {
+          const paddle = new Paddle(50, 10, -1, 390); // paddleX < 0
+          gameView["drawPaddle"](paddle);
+          expect(mockCtx.drawImage).toHaveBeenCalledWith(
+            gameView["sprite"],29,174,50,10,-1,390,50,10);
+        });
+
+        it("Debería dibujar el paddle dentro del canvas (límite superior izquierdo)", () => {
+          const paddle = new Paddle(50, 10, 1, 390); // paddleX > 0
+          gameView["drawPaddle"](paddle);
+          expect(mockCtx.drawImage).toHaveBeenCalledWith(
+            gameView["sprite"],29,174,50,10,1,390,50,10);
+        });
+      });
+
+      describe("Borde derecho", () => {
+        it("Debería dibujar el paddle en la frontera derecha del canvas", () => {
+          const paddle = new Paddle(50, 10, 398, 390); // paddleX + paddleWidth = canvasWidth
+          gameView["drawPaddle"](paddle);
+          expect(mockCtx.drawImage).toHaveBeenCalledWith(
+            gameView["sprite"],29,174,50,10,398,390,50,10);
+        });
+
+        it("Debería dibujar el paddle dentro del canvas (límite inferior derecho)", () => {
+          const paddle = new Paddle(50, 10, 397, 390); // paddleX + paddleWidth < canvasWidth
+          gameView["drawPaddle"](paddle);
+          expect(mockCtx.drawImage).toHaveBeenCalledWith(
+            gameView["sprite"],29,174,50,10,397,390,50,10);
+        });
+
+        it("Debería dibujar el paddle fuera del canvas (límite superior derecho)", () => {
+          const paddle = new Paddle(50, 10, 399, 390); // paddleX + paddleWidth > canvasWidth
+          gameView["drawPaddle"](paddle);
+          expect(mockCtx.drawImage).toHaveBeenCalledWith(
+            gameView["sprite"],29,174,50,10,399,390,50,10);
+        });
+      });
+    });
+  });
+
+  describe("GameView.updateScore() - particiones equivalentes", () => {
+    let gameView: GameView;
+    let mockScoreDiv: HTMLElement;
+
+    beforeEach(() => {
+      mockScoreDiv = document.createElement("div");
+      mockScoreDiv.id = "score";
+      document.body.appendChild(mockScoreDiv);
+
+      const mockCanvas = document.createElement("canvas");
+      const mockCtx = mockCanvas.getContext("2d")!;
+      gameView = new GameView(mockCanvas, mockCtx);
+    });
+
+    afterEach(() => {
+      document.body.innerHTML = "";
+    });
+
+    it("Debería actualizar el puntaje a un valor positivo", () => {
+      gameView.updateScore(100);
+      expect(mockScoreDiv.innerHTML).toBe("Score: 100");
+    });
+
+    it("Debería actualizar el puntaje a un valor negativo", () => {
+      gameView.updateScore(-50);
+      expect(mockScoreDiv.innerHTML).toBe("Score: -50");
+    });
+
+    it("Debería actualizar el puntaje a cero", () => {
+      gameView.updateScore(0);
+      expect(mockScoreDiv.innerHTML).toBe("Score: 0");
+    });
+  });
 });

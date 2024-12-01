@@ -149,5 +149,25 @@ export class GameController {
     this.mapCollision();
   }
 
-  private mapCollision() {}
+  private mapCollision() {
+    const bricks = this.map.getBricks();
+    for (let c = 0; c < this.map.getBrickColumnCount(); c++) {
+      for (let r = 0; r < this.map.getBrickRowCount(); r++) {
+        const currentBrick = bricks[c][r];
+
+        if (
+          currentBrick.isHit(
+            this.ball.x,
+            this.ball.y,
+            this.map.getBrickWidth(),
+            this.map.getBrickHeigth()
+          )
+        ) {
+          currentBrick.hit();
+          this.score += 100;
+          this.view.updateScore(this.score);
+        }
+      }
+    }
+  }
 }

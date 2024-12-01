@@ -5,10 +5,12 @@ import { Paddle } from "../../src/model/Paddle";
 import { Map } from "../../src/model/Map";
 import { Brick } from "../../src/model/Brick";
 
+// Mocks automaticos de las clases importadas
 jest.mock("../../src/view/GameView");
 jest.mock("../../src/model/Ball");
 jest.mock("../../src/model/Paddle");
 
+// Mock de la clase Paddle MANUAL
 class PaddleMock implements Paddle {
   public paddleWidth = 75;
   public paddleHeight = 10;
@@ -55,8 +57,9 @@ describe("GameController", () => {
   const paddleMock = new PaddleMock(0, 0, 0, 0);
 
   beforeEach(() => {
-    mockCanvas = document.createElement("canvas");
+    mockCanvas = document.createElement("canvas"); // Crea un canvas falso
     mockCtx = {
+      // Mock del contexto del canvas
       beginPath: jest.fn(),
       arc: jest.fn(),
       fill: jest.fn(),
@@ -68,13 +71,14 @@ describe("GameController", () => {
     // Mock del requestAnimationFrame
     global.requestAnimationFrame = jest.fn((callback) => {
       callback(0);
-      return 0; // Retorna un ID de frame ficticio
+      return 0; // Retorna un ID de frame ficticio para detenerlo
     });
 
     gameViewMock = {
-      clearCanvas: jest.fn(),
-      drawBall: jest.fn(),
-      drawMap: jest.fn(),
+      // Mock de GameView
+      clearCanvas: jest.fn(), // Mock de clearCanvas
+      drawBall: jest.fn(), // Mock de drawBall
+      drawMap: jest.fn(), // Mock de drawMap
       drawPaddle: jest.fn(),
       loadCanvas: jest.fn(),
       render: jest.fn(),
@@ -83,6 +87,7 @@ describe("GameController", () => {
     } as any;
 
     BallMock = {
+      // Mock de Ball
       x: 0,
       y: 0,
       dx: 0,
@@ -93,12 +98,13 @@ describe("GameController", () => {
     } as unknown as jest.Mocked<Ball>;
 
     MapMock = {
+      // Mock de Map
       bricks: [],
       initializeMap: jest.fn(),
       checkCollision: jest.fn(),
     } as unknown as jest.Mocked<Map>;
 
-    gameControllerMock = new GameController(gameViewMock);
+    gameControllerMock = new GameController(gameViewMock); // Crea una instancia de GameController
     gameControllerMock["isTesting"] = true; // Evitar que se llame a requestAnimationFrame
   });
 
@@ -120,7 +126,7 @@ describe("GameController", () => {
   });
 
   it("debería actualizar y renderizar la escena en cada ciclo del bucle", () => {
-    const renderSpy = jest.spyOn(gameViewMock, "render");
+    const renderSpy = jest.spyOn(gameViewMock, "render"); // Spy sobre el método render
 
     // Renderizamos la escena
     gameViewMock.render(BallMock, paddleMock, MapMock);
@@ -128,21 +134,21 @@ describe("GameController", () => {
   });
 
   it("debería devolver la variable isRunning", () => {
-    gameControllerMock["isRunning"] = true;
-    expect(gameControllerMock.getIsRunning()).toBe(true);
-    gameControllerMock["isRunning"] = false;
-    expect(gameControllerMock.getIsRunning()).toBe(false);
+    gameControllerMock["isRunning"] = true; // Establece isRunning en true
+    expect(gameControllerMock.getIsRunning()).toBe(true); // Comprueba que isRunning sea true
+    gameControllerMock["isRunning"] = false; // Establece isRunning en false
+    expect(gameControllerMock.getIsRunning()).toBe(false); // Comprueba que isRunning sea false
   });
 
   describe("initEvents", () => {
-    let addEventListenerSpy: jest.SpyInstance;
+    let addEventListenerSpy: jest.SpyInstance; // Definir Spy para addEventListener
 
     beforeEach(() => {
-      addEventListenerSpy = jest.spyOn(document, "addEventListener");
+      addEventListenerSpy = jest.spyOn(document, "addEventListener"); // Crear un Spy para addEventListener
     });
 
     afterEach(() => {
-      addEventListenerSpy.mockRestore();
+      addEventListenerSpy.mockRestore(); // Restaurar el Spy después de cada prueba
     });
 
     it('debería registrar un evento "keydown"', () => {
@@ -150,6 +156,7 @@ describe("GameController", () => {
       new GameController(mockView); // Deberia llamar automaticamente al initEvents
 
       expect(addEventListenerSpy).toHaveBeenCalledWith(
+        // Verificar que se llamó a addEventListener con "keydown"
         "keydown",
         expect.any(Function)
       );
@@ -160,6 +167,7 @@ describe("GameController", () => {
       new GameController(mockView); // Deberia llamar automaticamente al initEvents
 
       expect(addEventListenerSpy).toHaveBeenCalledWith(
+        // Verificar que se llamó a addEventListener con "keyup"
         "keyup",
         expect.any(Function)
       );
@@ -167,7 +175,7 @@ describe("GameController", () => {
 
     it("debería vincular los manejadores de eventos al contexto de GameController", () => {
       const mockView = {} as GameView; // Mock básico de GameView
-      const gameController = new GameController(mockView);
+      const gameController = new GameController(mockView); // Deberia llamar automaticamente al initEvents
 
       // Crear mocks para los métodos keyDownHandler y keyUpHandler
       const keyDownHandlerMock = jest.fn();
@@ -195,6 +203,7 @@ describe("GameController", () => {
 
     beforeEach(() => {
       const mockView = {
+        // Mock de GameView
         clearCanvas: jest.fn(),
         render: jest.fn(),
         updateScore: jest.fn(),
@@ -205,47 +214,47 @@ describe("GameController", () => {
     });
 
     it("debería establecer rightPressed en true cuando se presiona 'ArrowRight'", () => {
-      const event = new KeyboardEvent("keydown", { key: "ArrowRight" });
-      gameController["keyDownHandler"](event);
+      const event = new KeyboardEvent("keydown", { key: "ArrowRight" }); // Crear un evento de teclado
+      gameController["keyDownHandler"](event); // Llamar al manejador de eventos
 
-      expect(gameController["rightPressed"]).toBe(true);
+      expect(gameController["rightPressed"]).toBe(true); // Verificar que rightPressed sea true
     });
 
     it("debería establecer leftPressed en true cuando se presiona 'ArrowLeft'", () => {
-      const event = new KeyboardEvent("keydown", { key: "ArrowLeft" });
-      gameController["keyDownHandler"](event);
+      const event = new KeyboardEvent("keydown", { key: "ArrowLeft" }); // Crear un evento de teclado
+      gameController["keyDownHandler"](event); // Llamar al manejador de eventos
 
-      expect(gameController["leftPressed"]).toBe(true);
+      expect(gameController["leftPressed"]).toBe(true); // Verificar que leftPressed sea true
     });
 
     it("debería iniciar el juego si se presiona la barra espaciadora cuando startGame es true y isRunning es false", () => {
-      const startGameMethodSpy = jest.spyOn(gameController, "startGameMethod");
-      gameController["startGame"] = true;
-      gameController["isRunning"] = false;
+      const startGameMethodSpy = jest.spyOn(gameController, "startGameMethod"); // Spy sobre startGameMethod
+      gameController["startGame"] = true; // Establecer startGame en true
+      gameController["isRunning"] = false; // Establecer isRunning en false
 
-      const event = new KeyboardEvent("keydown", { key: " " });
-      gameController["keyDownHandler"](event);
+      const event = new KeyboardEvent("keydown", { key: " " }); // Crear un evento de teclado
+      gameController["keyDownHandler"](event); // Llamar al manejador de eventos
 
-      expect(startGameMethodSpy).toHaveBeenCalled();
-      expect(gameController["isRunning"]).toBe(true);
+      expect(startGameMethodSpy).toHaveBeenCalled(); // Verificar que se llamó a startGameMethod
+      expect(gameController["isRunning"]).toBe(true); // Verificar que isRunning sea true
     });
 
     it("debería detener el juego si se presiona la barra espaciadora cuando isRunning es true", () => {
-      gameController["startGame"] = true;
-      gameController["isRunning"] = true;
+      gameController["startGame"] = true; // Establecer startGame en true
+      gameController["isRunning"] = true; // Establecer isRunning en true
 
-      const event = new KeyboardEvent("keydown", { key: " " });
-      gameController["keyDownHandler"](event);
+      const event = new KeyboardEvent("keydown", { key: " " }); // Crear un evento de teclado
+      gameController["keyDownHandler"](event); // Llamar al manejador de eventos
 
-      expect(gameController["isRunning"]).toBe(false);
+      expect(gameController["isRunning"]).toBe(false); // Verificar que isRunning sea false
     });
 
     it("no debería cambiar propiedades para teclas irrelevantes", () => {
-      const event = new KeyboardEvent("keydown", { key: "A" });
-      gameController["keyDownHandler"](event);
+      const event = new KeyboardEvent("keydown", { key: "A" }); // Crear un evento de teclado con tecla irrelevante
+      gameController["keyDownHandler"](event); // Llamar al manejador de eventos
 
-      expect(gameController["rightPressed"]).toBe(false);
-      expect(gameController["leftPressed"]).toBe(false);
+      expect(gameController["rightPressed"]).toBe(false); // Verificar que rightPressed sea false
+      expect(gameController["leftPressed"]).toBe(false); // Verificar que leftPressed sea false
     });
   });
 
@@ -260,10 +269,10 @@ describe("GameController", () => {
     // Condition coverage de keyUpHandler
     it("debería establecer rightPressed en false cuando se suelta 'ArrowRight'", () => {
       gameController["rightPressed"] = true; // Simulamos que estaba presionado
-      const event = new KeyboardEvent("keyup", { key: "ArrowRight" });
-      gameController["keyUpHandler"](event);
+      const event = new KeyboardEvent("keyup", { key: "ArrowRight" }); // Creamos un evento de teclado
+      gameController["keyUpHandler"](event); // Llamar al manejador de eventos
 
-      expect(gameController["rightPressed"]).toBe(false);
+      expect(gameController["rightPressed"]).toBe(false); // Verificar que rightPressed sea false
     });
 
     it("no debería establecer rightPressed en false cuando no es 'ArrowRight'", () => {
@@ -276,8 +285,8 @@ describe("GameController", () => {
 
     it("debería establecer rightPressed en false cuando se suelta 'Right'", () => {
       gameController["rightPressed"] = true; // Simulamos que estaba presionado
-      const event = new KeyboardEvent("keyup", { key: "Right" });
-      gameController["keyUpHandler"](event);
+      const event = new KeyboardEvent("keyup", { key: "Right" }); // Creamos un evento de teclado
+      gameController["keyUpHandler"](event); // Llamar al manejador de eventos
 
       expect(gameController["rightPressed"]).toBe(false);
     });
@@ -287,7 +296,7 @@ describe("GameController", () => {
       const event = new KeyboardEvent("keyup", { key: "NotRight" }); //Forzamos que la key === Right de false
       gameController["keyUpHandler"](event);
 
-      expect(gameController["rightPressed"]).not.toBe(false);
+      expect(gameController["rightPressed"]).not.toBe(false); // Verificar que rightPressed no sea false
     });
 
     it("debería establecer leftPressed en false cuando se suelta 'ArrowLeft'", () => {
@@ -303,7 +312,7 @@ describe("GameController", () => {
       const event = new KeyboardEvent("keyup", { key: "NotArrowLeft" }); //Forzamos que la key === ArrowLeft de false
       gameController["keyUpHandler"](event);
 
-      expect(gameController["leftPressed"]).not.toBe(false);
+      expect(gameController["leftPressed"]).not.toBe(false); // Verificar que leftPressed no sea false
     });
 
     it("debería establecer leftPressed en false cuando se suelta 'Left'", () => {
@@ -323,7 +332,7 @@ describe("GameController", () => {
     });
 
     it("no debería cambiar propiedades para teclas irrelevantes", () => {
-      const event = new KeyboardEvent("keyup", { key: "A" });
+      const event = new KeyboardEvent("keyup", { key: "A" }); // Crear un evento de teclado con tecla irrelevante
       gameController["keyUpHandler"](event);
 
       expect(gameController["rightPressed"]).toBe(false);
@@ -339,15 +348,16 @@ describe("GameController", () => {
     let mockView: jest.Mocked<GameView>;
 
     beforeEach(() => {
-      mockBall = new Ball(0, 0, 0, 0, 0) as jest.Mocked<Ball>;
-      mockPaddle = new Paddle(0, 0, 0, 0) as jest.Mocked<Paddle>;
-      mockMap = new Map() as jest.Mocked<Map>;
-      mockView = {} as jest.Mocked<GameView>;
+      // Configuración inicial
+      mockBall = new Ball(0, 0, 0, 0, 0) as jest.Mocked<Ball>; // Crear un mock de Ball con Jest, del tipo Jest.Mocked<Ball>
+      mockPaddle = new Paddle(0, 0, 0, 0) as jest.Mocked<Paddle>; // Crear un mock de Paddle con Jest, del tipo Jest.Mocked<Paddle>
+      mockMap = new Map() as jest.Mocked<Map>; // Crear un mock de Map con Jest, del tipo Jest.Mocked<Map>
+      mockView = {} as jest.Mocked<GameView>; // Crear un mock vacio de GameView con Jest, del tipo Jest.Mocked<GameView>
 
       gameController = new GameController(mockView);
-      gameController["ball"] = mockBall;
-      gameController["paddle"] = mockPaddle;
-      gameController["map"] = mockMap;
+      gameController["ball"] = mockBall; // Establecer el mock de Ball
+      gameController["paddle"] = mockPaddle; // Establecer el mock de Paddle
+      gameController["map"] = mockMap; // Establecer el mock de Map
     });
 
     afterEach(() => {
@@ -447,11 +457,13 @@ describe("GameController", () => {
 
     beforeEach(() => {
       mockView = {
+        // Mock de GameView
         clearCanvas: jest.fn(),
         render: jest.fn(),
       };
 
       mockBall = {
+        // Mock de Ball
         x: 0,
         y: 0,
         dx: 0,
@@ -462,12 +474,14 @@ describe("GameController", () => {
       } as unknown as jest.Mocked<Ball>;
 
       mockMap = {
+        // Mock de Map
         bricks: [],
         initializeMap: jest.fn(),
         checkCollision: jest.fn(),
       } as unknown as jest.Mocked<Map>;
 
       mockPaddle = {
+        // Mock de Paddle
         paddleWidth: 75,
         paddleHeight: 10,
         paddleX: 0,
@@ -483,36 +497,37 @@ describe("GameController", () => {
       } as unknown as jest.Mocked<Paddle>;
 
       controller = new GameController(mockView);
-      controller["checkCollisions"] = jest.fn();
-      controller["ballMove"] = jest.fn();
-      controller["paddleMove"] = jest.fn();
-      controller["ball"] = mockBall;
-      controller["paddle"] = mockPaddle;
-      controller["map"] = mockMap;
+      controller["checkCollisions"] = jest.fn(); // Mockear checkCollisions
+      controller["ballMove"] = jest.fn(); // Mockear ballMove
+      controller["paddleMove"] = jest.fn(); // Mockear paddleMove
+      controller["ball"] = mockBall; // Establecer el mock de Ball
+      controller["paddle"] = mockPaddle; // Establecer el mock de Paddle
+      controller["map"] = mockMap; // Establecer el mock de Map
 
       controller["isTesting"] = true; // Evitar que se llame a requestAnimationFrame
     });
 
     afterEach(() => {
-      jest.restoreAllMocks();
+      jest.restoreAllMocks(); // Restaurar todos los mocks después de cada prueba
     });
 
     it("debería llamar a clearCanvas cuando gameLoop es ejecutado", () => {
-      controller["isRunning"] = true;
-      controller["startGame"] = true;
+      controller["isRunning"] = true; // Establecer isRunning en true
+      controller["startGame"] = true; // Establecer startGame en true
 
       controller["gameLoop"](); // Llamamos a la función
 
-      expect(mockView.clearCanvas).toHaveBeenCalled();
+      expect(mockView.clearCanvas).toHaveBeenCalled(); // Verificar que se llamó a clearCanvas
     });
 
     it("debería llamar a render con ball, paddle y map cuando gameLoop es ejecutado", () => {
-      controller["isRunning"] = true;
-      controller["startGame"] = true;
+      controller["isRunning"] = true; // Establecer isRunning en true
+      controller["startGame"] = true; // Establecer startGame en true
 
       controller["gameLoop"](); // Llamamos a la función
 
       expect(mockView.render).toHaveBeenCalledWith(
+        // Verificar que se llamó a render con los objetos correctos
         controller["ball"],
         controller["paddle"],
         controller["map"]
@@ -520,24 +535,24 @@ describe("GameController", () => {
     });
 
     it("no debería llamar a clearCanvas ni render si startGame es false", () => {
-      controller["isRunning"] = true;
-      controller["startGame"] = false;
+      controller["isRunning"] = true; // Establecer isRunning en true
+      controller["startGame"] = false; // Establecer startGame en false
 
       controller["gameLoop"](); // Llamamos a la función
 
-      expect(mockView.clearCanvas).not.toHaveBeenCalled();
-      expect(mockView.render).not.toHaveBeenCalled();
+      expect(mockView.clearCanvas).not.toHaveBeenCalled(); // Verificar que clearCanvas no se llamó
+      expect(mockView.render).not.toHaveBeenCalled(); // Verificar que render no se llamó
     });
 
     it("debería llamar a checkCollisions, ballMove y paddleMove si game está en ejecución", () => {
-      controller["isRunning"] = true;
-      controller["startGame"] = true;
+      controller["isRunning"] = true; // Establecer isRunning en true
+      controller["startGame"] = true; // Establecer startGame en true
 
       controller["gameLoop"](); // Llamamos a la función
 
-      expect(controller["checkCollisions"]).toHaveBeenCalled();
-      expect(controller["ballMove"]).toHaveBeenCalled();
-      expect(controller["paddleMove"]).toHaveBeenCalled();
+      expect(controller["checkCollisions"]).toHaveBeenCalled(); // Verificar que checkCollisions se llamó
+      expect(controller["ballMove"]).toHaveBeenCalled(); // Verificar que ballMove se llamó
+      expect(controller["paddleMove"]).toHaveBeenCalled(); // Verificar que paddleMove se llamó
     });
 
     it("debería llamar a requestAnimationFrame si isTesting es false y isRunning es true", () => {
@@ -547,7 +562,7 @@ describe("GameController", () => {
         .mockImplementation((cb) => {
           // Llamar al callback solo una vez
           setTimeout(() => cb(0), 0);
-          return 0;
+          return 0; // Retornar un ID de frame ficticio para detenerlo
         });
 
       // Configurar estado
@@ -561,11 +576,12 @@ describe("GameController", () => {
       // Verificar que se llama a requestAnimationFrame
       expect(requestAnimationFrameMock).toHaveBeenCalledTimes(1);
 
-      requestAnimationFrameMock.mockRestore();
+      requestAnimationFrameMock.mockRestore(); // Restaurar el mock por seguridad
     });
 
     // PAIRWISE TESTING
     describe("Pairwise Testing de gameLoop", () => {
+      // Casos de prueba
       const testCases = [
         { startGame: true, isRunning: true },
         { startGame: true, isRunning: false },
@@ -574,22 +590,26 @@ describe("GameController", () => {
       ];
 
       testCases.forEach(({ startGame, isRunning }) => {
+        // Crear un caso de prueba para cada combinación de valores
         it(`debería manejar startGame=${startGame} y isRunning=${isRunning}`, () => {
-          controller["startGame"] = startGame;
-          controller["isRunning"] = isRunning;
+          controller["startGame"] = startGame; // Configurar startGame
+          controller["isRunning"] = isRunning; // Configurar isRunning
 
-          controller["gameLoop"]();
+          controller["gameLoop"](); // Llamar al método
 
           if (startGame && isRunning) {
-            expect(mockView.clearCanvas).toHaveBeenCalled();
+            // Si startGame y isRunning son true
+            expect(mockView.clearCanvas).toHaveBeenCalled(); // Se llama a clearCanvas
             expect(mockView.render).toHaveBeenCalledWith(
+              // Se llama a render con los objetos correctos
               controller["ball"],
               controller["paddle"],
               controller["map"]
             );
           } else {
-            expect(mockView.clearCanvas).not.toHaveBeenCalled();
-            expect(mockView.render).not.toHaveBeenCalled();
+            // Si startGame o isRunning son false
+            expect(mockView.clearCanvas).not.toHaveBeenCalled(); // No se llama a clearCanvas
+            expect(mockView.render).not.toHaveBeenCalled(); // No se llama a render
           }
         });
       });
@@ -602,6 +622,7 @@ describe("GameController", () => {
 
     beforeEach(() => {
       mockBall = {
+        // Mock de Ball
         x: 0,
         y: 0,
         dx: 0,
@@ -612,13 +633,13 @@ describe("GameController", () => {
       } as unknown as jest.Mocked<Ball>;
 
       controller = new GameController({} as GameView);
-      controller["ball"] = mockBall;
+      controller["ball"] = mockBall; // Establecer el mock de Ball
     });
 
     it("debería llamar a move de la bola", () => {
       controller["ballMove"]();
 
-      expect(mockBall.move).toHaveBeenCalled();
+      expect(mockBall.move).toHaveBeenCalled(); // Verificar que se llamó a move de la bola
     });
   });
 
@@ -628,6 +649,7 @@ describe("GameController", () => {
 
     beforeEach(() => {
       mockPaddle = {
+        // Mock de Paddle
         paddleWidth: 75,
         paddleHeight: 10,
         paddleX: 0,
@@ -642,14 +664,14 @@ describe("GameController", () => {
         move: jest.fn(),
       } as unknown as jest.Mocked<Paddle>;
 
-      controller = new GameController({} as GameView);
+      controller = new GameController({} as GameView); // Crear una instancia de GameController con un mock vacío de GameView
       controller["paddle"] = mockPaddle;
     });
 
     it("debería llamar a move del paddle", () => {
       controller["paddleMove"]();
 
-      expect(mockPaddle.move).toHaveBeenCalled();
+      expect(mockPaddle.move).toHaveBeenCalled(); // Verificar que se llamó a move del paddle
     });
   });
 
@@ -660,12 +682,14 @@ describe("GameController", () => {
 
     beforeEach(() => {
       mockView = {
+        // Mock de GameView
         updateScore: jest.fn(),
         clearCanvas: jest.fn(),
         render: jest.fn(),
       } as unknown as jest.Mocked<GameView>;
 
       (Ball as jest.Mock) = jest.fn().mockImplementation(() => ({
+        // Mock de Ball para pdoer observar el constructor
         x: 0,
         y: 0,
         dx: 0,
@@ -677,6 +701,7 @@ describe("GameController", () => {
       }));
 
       (Paddle as jest.Mock) = jest.fn().mockImplementation(() => ({
+        // Mock de Paddle para pdoer observar el constructor
         paddleWidth: 75,
         paddleHeight: 10,
         paddleX: 0,
@@ -692,6 +717,7 @@ describe("GameController", () => {
       }));
 
       mockMap = {
+        // Mock de Map
         bricks: [],
         initializeMap: jest.fn(),
         checkCollision: jest.fn(),
@@ -701,7 +727,7 @@ describe("GameController", () => {
       } as unknown as jest.Mocked<Map>;
 
       controller = new GameController(mockView);
-      controller["map"] = mockMap;
+      controller["map"] = mockMap; // Establecer el mock de Map
       controller["isTesting"] = true; // Evitar que se llame a requestAnimationFrame
     });
 
@@ -710,7 +736,7 @@ describe("GameController", () => {
 
       controller["startGameMethod"]();
 
-      expect(updateScoreMock).toHaveBeenCalledWith(controller["score"]);
+      expect(updateScoreMock).toHaveBeenCalledWith(controller["score"]); // Verificar que se llamó a updateScore con la puntuación inicial
       updateScoreMock.mockRestore();
     });
 
@@ -759,21 +785,25 @@ describe("GameController", () => {
 
     beforeEach(() => {
       mockView = {
+        // Mock de GameView
         updateScore: jest.fn(),
       } as unknown as jest.Mocked<GameView>;
 
       mockBall = {
+        // Mock de Ball
         x: 10,
         y: 10,
         changeY: jest.fn(),
       } as unknown as jest.Mocked<Ball>;
 
       mockBrick = {
+        // Mock de Brick
         isHit: jest.fn(() => true),
         hit: jest.fn(),
       } as unknown as jest.Mocked<Brick>;
 
       mockMap = {
+        // Mock de Map
         getBricks: jest.fn(() => [[mockBrick]]),
         getBrickColumnCount: jest.fn(() => 1),
         getBrickRowCount: jest.fn(() => 1),
@@ -788,29 +818,29 @@ describe("GameController", () => {
 
     it("debería actualizar la puntuación cuando un ladrillo es golpeado", () => {
       controller["mapCollision"]();
-      expect(mockView.updateScore).toHaveBeenCalledWith(100);
+      expect(mockView.updateScore).toHaveBeenCalledWith(100); // Verificar que se llamó a updateScore con la puntuación correcta
     });
 
     it("debería llamar a hit en el ladrillo cuando la bola lo golpea", () => {
       controller["mapCollision"]();
-      expect(mockBrick.hit).toHaveBeenCalled();
+      expect(mockBrick.hit).toHaveBeenCalled(); // Verificar que se llamó a hit en el ladrillo
     });
 
     it("no debería actualizar la puntuación si la bola no golpea el ladrillo", () => {
       mockBrick.isHit.mockReturnValueOnce(false); // Hacer que isHit devuelva false
       controller["mapCollision"]();
-      expect(mockView.updateScore).not.toHaveBeenCalled();
+      expect(mockView.updateScore).not.toHaveBeenCalled(); // Verificar que no se llamó a updateScore
     });
 
     it("debería llamar a changeY cuando un ladrillo es golpeado", () => {
       controller["mapCollision"]();
-      expect(mockBall.changeY).toHaveBeenCalled();
+      expect(mockBall.changeY).toHaveBeenCalled(); // Verificar que se llamó a changeY
     });
 
     it("no debería llamar a changeY si la bola no golpea el ladrillo", () => {
       mockBrick.isHit.mockReturnValueOnce(false); // Hacer que isHit devuelva false
       controller["mapCollision"]();
-      expect(mockBall.changeY).not.toHaveBeenCalled();
+      expect(mockBall.changeY).not.toHaveBeenCalled(); // Verificar que no se llamó a changeY
     });
   });
 });

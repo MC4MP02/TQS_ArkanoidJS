@@ -197,6 +197,7 @@ describe("GameController", () => {
       } as unknown as GameView;
 
       gameController = new GameController(mockView);
+      gameController["isTesting"] = true; // Evitar que se llame a requestAnimationFrame
     });
 
     it("debería establecer rightPressed en true cuando se presiona 'ArrowRight'", () => {
@@ -484,6 +485,12 @@ describe("GameController", () => {
       controller["ball"] = mockBall;
       controller["paddle"] = mockPaddle;
       controller["map"] = mockMap;
+
+      controller["isTesting"] = true; // Evitar que se llame a requestAnimationFrame
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
     });
 
     it("debería llamar a clearCanvas cuando gameLoop es ejecutado", () => {
@@ -516,6 +523,41 @@ describe("GameController", () => {
 
       expect(mockView.clearCanvas).not.toHaveBeenCalled();
       expect(mockView.render).not.toHaveBeenCalled();
+    });
+
+    it("debería llamar a checkCollisions, ballMove y paddleMove si game está en ejecución", () => {
+      controller["isRunning"] = true;
+      controller["startGame"] = true;
+
+      controller["gameLoop"](); // Llamamos a la función
+
+      expect(controller["checkCollisions"]).toHaveBeenCalled();
+      expect(controller["ballMove"]).toHaveBeenCalled();
+      expect(controller["paddleMove"]).toHaveBeenCalled();
+    });
+
+    it("debería llamar a requestAnimationFrame si isTesting es false y isRunning es true", () => {
+      // Mockear requestAnimationFrame
+      const requestAnimationFrameMock = jest
+        .spyOn(window, "requestAnimationFrame")
+        .mockImplementation((cb) => {
+          // Llamar al callback solo una vez
+          setTimeout(() => cb(0), 0);
+          return 0;
+        });
+
+      // Configurar estado
+      controller["isRunning"] = true;
+      controller["startGame"] = true;
+      controller["isTesting"] = false;
+
+      // Llamar al método que inicia el bucle
+      controller["gameLoop"]();
+
+      // Verificar que se llama a requestAnimationFrame
+      expect(requestAnimationFrameMock).toHaveBeenCalledTimes(1);
+
+      requestAnimationFrameMock.mockRestore();
     });
 
     // PAIRWISE TESTING

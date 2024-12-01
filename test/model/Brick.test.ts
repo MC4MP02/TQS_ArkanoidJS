@@ -8,7 +8,7 @@ describe("Brick", () => {
   };
 
   beforeEach(() => {
-    brick = new Brick(10, 20, 1, 0);
+    brick = new Brick(10, 20, 1, 0); // Inicializa un ladrillo con posición, estado y color predeterminados antes de cada test
   });
 
   // Test de inicialización
@@ -21,17 +21,20 @@ describe("Brick", () => {
 
   // Test de valores predeterminados del estado
   it("debería inicializarse con el estado ALIVE cuando el estado es 1", () => {
+    // Verifica que un ladrillo inicializado con estado 1 está ALIVE
     const brickAlive = new Brick(5, 5, BRICK_STATUS.ALIVE, 100);
     expect(brickAlive.status).toBe(BRICK_STATUS.ALIVE);
   });
 
   it("debería inicializarse con el estado DEAD cuando el estado es 0", () => {
+    // Verifica que un ladrillo inicializado con estado 0 está DEAD
     const brickDead = new Brick(5, 5, BRICK_STATUS.DEAD, 100);
     expect(brickDead.status).toBe(BRICK_STATUS.DEAD);
   });
 
   describe("hit", () => {
     it("debería llamar a la clase hit() y actualizar el status del brick", () => {
+      // Comprueba que al llamar a hit() el ladrillo pasa a estado DEAD
       const brickAlive = new Brick(0, 0, BRICK_STATUS.ALIVE, 0);
 
       expect(brickAlive.status).toBe(BRICK_STATUS.ALIVE);
@@ -48,6 +51,7 @@ describe("Brick", () => {
     });
 
     it("debería devolver true si la bola golpea el ladrillo", () => {
+      // Verifica si la bola golpea el ladrillo cuando está dentro de los límites
       const ballX = 150;
       const ballY = 120;
       const brickWidth = 50;
@@ -56,6 +60,7 @@ describe("Brick", () => {
     });
 
     it("debería devolver false si la bola está fuera del rango en X", () => {
+      // Verifica que devuelve false si la bola está fuera del rango en el eje X
       const ballX = 200;
       const ballY = 120;
       const brickWidth = 50;
@@ -64,6 +69,7 @@ describe("Brick", () => {
     });
 
     it("debería devolver false si la bola está fuera del rango en Y", () => {
+      // Verifica que devuelve false si la bola está fuera del rango en el eje Y
       const ballX = 150;
       const ballY = 200;
       const brickWidth = 50;
@@ -72,6 +78,7 @@ describe("Brick", () => {
     });
 
     it("debería devolver false si el ladrillo está muerto", () => {
+      // Verifica que isHit devuelva false si el ladrillo ya está en estado DEAD
       brick.status = BRICK_STATUS.DEAD; // Marcamos el ladrillo como muerto
       const ballX = 150;
       const ballY = 120;
@@ -81,6 +88,7 @@ describe("Brick", () => {
     });
 
     it("debería devolver false si la bola está justo fuera del límite derecho del ladrillo", () => {
+      // Verifica que devuelve false si la bola está justo fuera del límite del ladrillo
       const ballX = 151; // Fuera por un pixel
       const ballY = 120;
       const brickWidth = 50;
@@ -95,6 +103,7 @@ describe("Brick", () => {
 
   describe("Brick Constructor - Particiones, Límites y Fronteras", () => {
     it("debería inicializar correctamente con valores válidos", () => {
+      // Verifica que el constructor maneja correctamente valores válidos
       const brick = new Brick(10, 20, 1, 100);
       expect(brick.BrickX).toBe(10);
       expect(brick.BrickY).toBe(20);
@@ -103,12 +112,14 @@ describe("Brick", () => {
     });
   
     it("debería manejar correctamente valores frontera para coordenadas", () => {
+      // Verifica que el constructor maneja coordenadas en el límite mínimo
       const brick = new Brick(0, 0, 1, 0); // Coordenadas mínimas
       expect(brick.BrickX).toBe(0);
       expect(brick.BrickY).toBe(0);
     });
   
     it("debería manejar valores límite fuera del rango esperado", () => {
+      // Verifica que el constructor maneja valores fuera del rango esperado
       const brick = new Brick(-10, -20, 1, -50); // Coordenadas y color negativos
       expect(brick.BrickX).toBe(-10);
       expect(brick.BrickY).toBe(-20);
@@ -116,6 +127,7 @@ describe("Brick", () => {
     });
   
     it("debería manejar valores frontera para color", () => {
+       // Verifica que el constructor maneja el color en su valor máximo
       const brick = new Brick(10, 20, 1, 255); // Máximo color esperado
       expect(brick.color).toBe(255);
     });
@@ -123,12 +135,14 @@ describe("Brick", () => {
 
   describe("Brick.hit - Particiones, Límites y Fronteras", () => {
     it("debería cambiar el estado del ladrillo a DEAD si está ALIVE", () => {
+      // Verifica que hit cambia el estado del ladrillo a DEAD
       brick.status = 1; // ALIVE
       brick.hit();
       expect(brick.status).toBe(0); // DEAD
     });
   
     it("debería manejar correctamente si el ladrillo ya está DEAD", () => {
+      // Verifica que hit no cambia el estado si el ladrillo ya está DEAD
       brick.status = 0; // DEAD
       brick.hit();
       expect(brick.status).toBe(0); // Sigue estando DEAD

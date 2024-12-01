@@ -801,5 +801,16 @@ describe("GameController", () => {
       controller["mapCollision"]();
       expect(mockView.updateScore).not.toHaveBeenCalled();
     });
+
+    it("debería llamar a changeY cuando un ladrillo es golpeado", () => {
+      controller["mapCollision"]();
+      expect(mockBall.changeY).toHaveBeenCalled();
+    });
+
+    it("no debería llamar a changeY si la bola no golpea el ladrillo", () => {
+      mockBrick.isHit.mockReturnValueOnce(false); // Hacer que isHit devuelva false
+      controller["mapCollision"]();
+      expect(mockBall.changeY).not.toHaveBeenCalled();
+    });
   });
 });

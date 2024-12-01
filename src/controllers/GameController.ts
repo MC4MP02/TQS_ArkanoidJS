@@ -11,6 +11,7 @@ export class GameController {
   private leftPressed: boolean = false;
   private startGame: boolean = false;
   private isTesting: boolean = false;
+  private score: number = 0;
 
   private ball: Ball;
   private paddle: Paddle;
@@ -28,7 +29,22 @@ export class GameController {
   }
 
   public startGameMethod() {
+    console.log("GAME STARTED");
+    this.view.updateScore(this.score);
+
     this.isRunning = true;
+    this.startGame = true;
+
+    // Inicialización de la bola
+    this.ball = new Ball(0, 0, 0, 0, 0);
+
+    // Inicialización de la paleta
+    this.paddle = new Paddle(0, 0, 0, 0);
+
+    // Inicialización del mapa
+    this.map.selectLevel(1);
+
+    // Llamada al gameLoop (puede ser mockeada)
     this.gameLoop();
   }
 

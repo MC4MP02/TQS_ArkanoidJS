@@ -5,44 +5,51 @@ describe("Map", () => {
   let map: Map;
 
   beforeEach(() => {
+    // Inicializa una nueva instancia de Map antes de cada test
     map = new Map();
   });
 
+  // Test para verificar que getBricks devuelve correctamente la matriz de ladrillos inicial
   it("debería devolver el array de bricks con getBricks", () => {
-    expect(map.getBricks()).toEqual([]); // Valor inicial por defecto
+    expect(map.getBricks()).toEqual([]); // La matriz inicial debería estar vacía
   });
 
+  // Test para verificar el número de columnas de ladrillos
   it("debería devolver el número de columnas de ladrillos con getBrickColumnCount", () => {
-    expect(map.getBrickColumnCount()).toBe(0); // Valor inicial por defecto
+    expect(map.getBrickColumnCount()).toBe(0); // Inicialmente, debería ser 0
   });
 
+  // Test para verificar el número de filas de ladrillos
   it("debería devolver el número de filas de ladrillos con getBrickRowCount", () => {
-    expect(map.getBrickRowCount()).toBe(0); // Valor inicial por defecto
+    expect(map.getBrickRowCount()).toBe(0); // Inicialmente, debería ser 0
   });
 
+  // Test para verificar el ancho de los ladrillos
   it("debería devolver el ancho de los ladrillos con getBrickWidth", () => {
-    expect(map.getBrickWidth()).toBe(0); // Valor inicial por defecto
+    expect(map.getBrickWidth()).toBe(0); // Inicialmente, debería ser 0
   });
 
+  // Test para verificar la altura de los ladrillos
   it("debería devolver la altura de los ladrillos con getBrickHeigth", () => {
-    expect(map.getBrickHeigth()).toBe(0); // Valor inicial por defecto
+    expect(map.getBrickHeigth()).toBe(0); // Inicialmente, debería ser 0
   });
 
+  // Test para verificar los valores personalizados asignados a las propiedades del mapa
   it("debería devolver valores personalizados asignados a las propiedades", () => {
     // Crear mocks de los bricks
     const mockBrickAlive = {
-      BrickX: 0,
-      BrickY: 0,
-      status: 1,
-      color: 0xffffff,
-      hit: jest.fn(),
-      isHit: jest.fn(),
+      BrickX: 0, // Coordenada X del ladrillo
+      BrickY: 0, // Coordenada Y del ladrillo
+      status: 1, // Estado del ladrillo (vivo)
+      color: 0xffffff, // Color del ladrillo
+      hit: jest.fn(), // Mock para el método hit
+      isHit: jest.fn(), // Mock para el método isHit
     };
 
     const mockBrickDead = {
       BrickX: 100,
       BrickY: 100,
-      status: 0,
+      status: 0, // Estado del ladrillo (muerto)
       color: 0x000000,
       hit: jest.fn(),
       isHit: jest.fn(),
@@ -64,6 +71,7 @@ describe("Map", () => {
   });
 
   describe("selectLevel", () => {
+    // Test para verificar la configuración del nivel 1
     it("debería asignar valores correctos al seleccionar el nivel 1", () => {
       map.selectLevel(1);
 
@@ -76,9 +84,11 @@ describe("Map", () => {
       expect(map["brickOffsetTop"]).toBe(80);
     });
 
+    // Test para verificar que las propiedades se reinician en un nivel no válido
     it("debería reiniciar las propiedades al seleccionar un nivel no válido", () => {
       map.selectLevel(99); // Nivel no válido
 
+      // Verifica que las propiedades se reinicien a 0
       expect(map["brickColumnCount"]).toBe(0);
       expect(map["brickRowCount"]).toBe(0);
       expect(map["brickWidth"]).toBe(0);
@@ -88,6 +98,7 @@ describe("Map", () => {
       expect(map["brickOffsetTop"]).toBe(0);
     });
 
+    // Test para verificar que generateBricks es llamado al seleccionar un nivel
     it("debería llamar a generateBricks al seleccionar cualquier nivel", () => {
       jest.spyOn(map, "generateBricks");
 
@@ -99,6 +110,7 @@ describe("Map", () => {
     });
   });
   describe("generateBricks", () => {
+    // Test para verificar que la matriz de ladrillos tiene las dimensiones correctas
     it("debería inicializar la matriz de bricks con las dimensiones correctas", () => {
       map["brickColumnCount"] = 2; // Dos columnas
       map["brickRowCount"] = 3; // Tres filas
@@ -110,6 +122,7 @@ describe("Map", () => {
       expect(map["bricks"][1].length).toBe(3); // Tres filas en la segunda columna
     });
 
+    // Test para verificar que los ladrillos tienen las posiciones correctas
     it("debería asignar posiciones correctas a los bricks", () => {
       map["brickColumnCount"] = 1; // Una columna
       map["brickRowCount"] = 1; // Una fila
@@ -130,6 +143,7 @@ describe("Map", () => {
       );
     });
 
+    // Test para verificar que cada ladrillo se inicializa correctamente como instancia de Brick
     it("debería inicializar cada ladrillo como una instancia de Brick", () => {
       map["brickColumnCount"] = 1; // Una columna
       map["brickRowCount"] = 1; // Una fila
@@ -160,6 +174,7 @@ describe("Map", () => {
 
     describe("generateBricks - Loop Testing", () => {
       beforeEach(() => {
+        // Configuración previa al test para las dimensiones y posiciones
         map["brickWidth"] = 32;
         map["brickHeigth"] = 16;
         map["brickPadding"] = 2;
@@ -168,6 +183,7 @@ describe("Map", () => {
         map["BRICK_STATUS"] = { ALIVE: 1, DEAD: 0 };
       });
     
+      // Test del bucle interno: Verifica iteraciones específicas de filas con una columna fija
       it("debería testear el bucle interno (r = 0,1,2,4,6,7) con c = 1", () => {
         map["brickColumnCount"] = 2; // Dos columnas
         map["brickRowCount"] = 8; // Ocho filas para probar los valores específicos
@@ -189,6 +205,7 @@ describe("Map", () => {
         });
       });
     
+      // Test del bucle externo: Verifica iteraciones específicas de columnas con una fila fija
       it("debería testear el bucle externo (c = 0,1,2,8,12,13) con r = 7", () => {
         map["brickColumnCount"] = 14; // Catorce columnas para probar los valores específicos
         map["brickRowCount"] = 8; // Ocho filas
@@ -217,6 +234,7 @@ describe("Map", () => {
   //-------------------------------------------------------------------------------------------------------------
 
   describe("Propiedades - Dimensiones y Desplazamiento", () => {
+    // Test para verificar los límites y fronteras de las dimensiones de la matriz
     it("debería manejar dimensiones de matriz en la frontera y límites", () => {
       // Frontera
       map["brickColumnCount"] = 5;
@@ -236,7 +254,7 @@ describe("Map", () => {
       expect(map.getBrickColumnCount()).toBe(6);
       expect(map.getBrickRowCount()).toBe(6);
     });
-
+    // Test para verificar los límites y fronteras de las dimensiones de los ladrillos
     it("debería manejar dimensiones de ladrillos en la frontera y límites", () => {
       // Frontera
       map["brickWidth"] = 32;

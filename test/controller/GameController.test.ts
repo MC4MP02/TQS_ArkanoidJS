@@ -77,6 +77,7 @@ describe("GameController", () => {
       drawPaddle: jest.fn(),
       loadCanvas: jest.fn(),
       render: jest.fn(),
+      updateScore: jest.fn(),
       sprite: document.createElement("img"),
     } as any;
 
@@ -97,6 +98,7 @@ describe("GameController", () => {
     } as unknown as jest.Mocked<Map>;
 
     gameControllerMock = new GameController(gameViewMock);
+    gameControllerMock["isTesting"] = true; // Evitar que se llame a requestAnimationFrame
   });
 
   it("debería inicializar el GameController", () => {
@@ -194,6 +196,7 @@ describe("GameController", () => {
       const mockView = {
         clearCanvas: jest.fn(),
         render: jest.fn(),
+        updateScore: jest.fn(),
       } as unknown as GameView;
 
       gameController = new GameController(mockView);
@@ -646,6 +649,90 @@ describe("GameController", () => {
       controller["paddleMove"]();
 
       expect(mockPaddle.move).toHaveBeenCalled();
+    });
+  });
+
+  describe("startGameMethod", () => {
+    let controller: GameController;
+    let mockView: jest.Mocked<GameView>;
+    let mockMap: jest.Mocked<Map>;
+
+    beforeEach(() => {
+      mockView = {
+        updateScore: jest.fn(),
+        clearCanvas: jest.fn(),
+        render: jest.fn(),
+      } as unknown as jest.Mocked<GameView>;
+
+      (Ball as jest.Mock) = jest.fn().mockImplementation(() => ({
+        x: 0,
+        y: 0,
+        dx: 0,
+        dy: 0,
+        radius: 5,
+        move: jest.fn(),
+        checkCollision: jest.fn(),
+        ballDownMap: jest.fn(),
+      }));
+
+      (Paddle as jest.Mock) = jest.fn().mockImplementation(() => ({
+        paddleWidth: 75,
+        paddleHeight: 10,
+        paddleX: 0,
+        paddleY: 0,
+        canvasWidth: 448,
+        PADDLE_SENSITIVITY: 3,
+        collisionRight: false,
+        collisionLeft: false,
+        checkCollision: jest.fn(),
+        checkCollisionCanvasRight: jest.fn(),
+        checkCollisionCanvasLeft: jest.fn(),
+        move: jest.fn(),
+      }));
+
+      mockMap = {
+        bricks: [],
+        initializeMap: jest.fn(),
+        checkCollision: jest.fn(),
+        selectLevel: jest.fn(),
+      } as unknown as jest.Mocked<Map>;
+
+      controller = new GameController(mockView);
+      controller["map"] = mockMap;
+      controller["isTesting"] = true; // Evitar que se llame a requestAnimationFrame
+    });
+
+    it("debería inicializar la puntuación correctamente", () => {
+      const updateScoreMock = jest.spyOn(controller["view"], "updateScore");
+
+      controller["startGameMethod"]();
+
+      expect(updateScoreMock).toHaveBeenCalledWith(controller["score"]);
+      updateScoreMock.mockRestore();
+    });
+
+    it("debería inicializar las propiedades correctamente", () => {
+      // Mockear gameLoop
+      controller["gameLoop"] = jest.fn();
+
+      // Llamar al método startGameMethod
+      controller["startGameMethod"]();
+
+      // Verificar que las propiedades están correctamente inicializadas
+      expect(controller["isRunning"]).toBe(true);
+      expect(controller["startGame"]).toBe(true);
+
+      // Verificar que se ha creado una bola con las propiedades correctas
+      expect(Ball).toHaveBeenCalledWith(0, 0, 0, 0, 0);
+
+      // Verificar que se ha creado la paleta con las propiedades correctas
+      expect(Paddle).toHaveBeenCalledWith(0, 0, 0, 0);
+
+      // Verificar que se llama a selectLevel
+      expect(mockMap.selectLevel).toHaveBeenCalled();
+
+      // Verificar que gameLoop se llama
+      expect(controller["gameLoop"]).toHaveBeenCalled();
     });
   });
 });

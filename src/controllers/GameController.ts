@@ -31,7 +31,16 @@ export class GameController {
     this.gameLoop();
   }
 
-  public gameLoop() {}
+  private gameLoop() {
+    if (this.startGame && this.isRunning) {
+      this.view.clearCanvas();
+      this.view.render(this.ball, this.paddle, this.map);
+    }
+  }
+
+  private ballMove() {}
+
+  private paddleMove() {}
 
   public getIsRunning() {
     return this.isRunning;

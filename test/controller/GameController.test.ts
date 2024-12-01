@@ -723,10 +723,21 @@ describe("GameController", () => {
       expect(controller["startGame"]).toBe(true);
 
       // Verificar que se ha creado una bola con las propiedades correctas
-      expect(Ball).toHaveBeenCalledWith(0, 0, 0, 0, 0);
+      expect(Ball).toHaveBeenCalledWith(
+        controller["canvasWidth"] / 2,
+        controller["canvasHeight"] - 40,
+        4,
+        1,
+        -1
+      );
 
       // Verificar que se ha creado la paleta con las propiedades correctas
-      expect(Paddle).toHaveBeenCalledWith(0, 0, 0, 0);
+      expect(Paddle).toHaveBeenCalledWith(
+        50,
+        10,
+        (controller["canvasWidth"] - 50) / 2,
+        controller["canvasHeight"] - 10 - 20
+      );
 
       // Verificar que se llama a selectLevel
       expect(mockMap.selectLevel).toHaveBeenCalled();

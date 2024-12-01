@@ -210,6 +210,140 @@ describe("Map", () => {
         });
       });
     });
-    
+  });
+
+  //-------------------------------------------------------------------------------------------------------------
+  //-------------------- TESTS PARTICIONES EQUIVALENTES, VALORES LÍMITE Y VALORES FRONTERA ----------------------
+  //-------------------------------------------------------------------------------------------------------------
+
+  describe("Propiedades - Dimensiones y Desplazamiento", () => {
+    it("debería manejar dimensiones de matriz en la frontera y límites", () => {
+      // Frontera
+      map["brickColumnCount"] = 5;
+      map["brickRowCount"] = 5;
+      expect(map.getBrickColumnCount()).toBe(5);
+      expect(map.getBrickRowCount()).toBe(5);
+
+      // Límite inferior
+      map["brickColumnCount"] = 4;
+      map["brickRowCount"] = 4;
+      expect(map.getBrickColumnCount()).toBe(4);
+      expect(map.getBrickRowCount()).toBe(4);
+
+      // Límite superior
+      map["brickColumnCount"] = 6;
+      map["brickRowCount"] = 6;
+      expect(map.getBrickColumnCount()).toBe(6);
+      expect(map.getBrickRowCount()).toBe(6);
+    });
+
+    it("debería manejar dimensiones de ladrillos en la frontera y límites", () => {
+      // Frontera
+      map["brickWidth"] = 32;
+      map["brickHeigth"] = 16;
+      expect(map.getBrickWidth()).toBe(32);
+      expect(map.getBrickHeigth()).toBe(16);
+
+      // Límite inferior
+      map["brickWidth"] = 31;
+      map["brickHeigth"] = 15;
+      expect(map.getBrickWidth()).toBe(31);
+      expect(map.getBrickHeigth()).toBe(15);
+
+      // Límite superior
+      map["brickWidth"] = 33;
+      map["brickHeigth"] = 17;
+      expect(map.getBrickWidth()).toBe(33);
+      expect(map.getBrickHeigth()).toBe(17);
+    });
+
+    it("debería manejar desplazamiento y espaciado en la frontera y límites", () => {
+      // Frontera
+      map["brickOffsetLeft"] = 16;
+      map["brickOffsetTop"] = 80;
+      map["brickPadding"] = 0;
+      expect(map["brickOffsetLeft"]).toBe(16);
+      expect(map["brickOffsetTop"]).toBe(80);
+      expect(map["brickPadding"]).toBe(0);
+
+      // Límite inferior
+      map["brickOffsetLeft"] = 15;
+      map["brickOffsetTop"] = 79;
+      map["brickPadding"] = -1;
+      expect(map["brickOffsetLeft"]).toBe(15);
+      expect(map["brickOffsetTop"]).toBe(79);
+      expect(map["brickPadding"]).toBe(-1);
+
+      // Límite superior
+      map["brickOffsetLeft"] = 17;
+      map["brickOffsetTop"] = 81;
+      map["brickPadding"] = 1;
+      expect(map["brickOffsetLeft"]).toBe(17);
+      expect(map["brickOffsetTop"]).toBe(81);
+      expect(map["brickPadding"]).toBe(1);
+    });
+  });
+
+  describe("selectLevel - Límites y Frontera", () => {
+    it("debería manejar niveles válidos y no válidos en la frontera y límites", () => {
+      // Frontera
+      map.selectLevel(1);
+      expect(map.getBrickColumnCount()).toBe(13);
+
+      // Límite inferior
+      map.selectLevel(0);
+      expect(map.getBrickColumnCount()).toBe(0);
+
+      // Límite superior
+      map.selectLevel(2);
+      expect(map.getBrickColumnCount()).toBe(0);
+    });
+  });
+
+  describe("generateBricks - Límites y Frontera", () => {
+    it("debería generar correctamente una matriz en la frontera y límites", () => {
+
+      // Límite inferior
+      map["brickColumnCount"] = 4;
+      map["brickRowCount"] = 4;
+      map.generateBricks();
+      expect(map.getBricks().length).toBe(4);
+      expect(map.getBricks()[0].length).toBe(4);
+
+      // Frontera
+      map["brickColumnCount"] = 5;
+      map["brickRowCount"] = 5;
+      map.generateBricks();
+      expect(map.getBricks().length).toBe(5);
+      expect(map.getBricks()[0].length).toBe(5);
+
+      // Límite superior
+      map["brickColumnCount"] = 6;
+      map["brickRowCount"] = 6;
+      map.generateBricks();
+      expect(map.getBricks().length).toBe(6);
+      expect(map.getBricks()[0].length).toBe(6);
+    });
+
+    it("debería manejar valores frontera y límites para ladrillos", () => {
+
+      // Límite inferior
+      map["brickColumnCount"] = 0;
+      map["brickRowCount"] = 0;
+      map.generateBricks();
+      expect(map.getBricks().length).toBe(0);
+
+      map["brickColumnCount"] = 1; // Frontera
+      map["brickRowCount"] = 1;
+      map.generateBricks();
+      const brick = map.getBricks()[0][0];
+      expect(brick).toBeDefined();
+
+      // Límite superior
+      map["brickColumnCount"] = 2;
+      map["brickRowCount"] = 2;
+      map.generateBricks();
+      expect(map.getBricks().length).toBe(2);
+    });
   });
 });

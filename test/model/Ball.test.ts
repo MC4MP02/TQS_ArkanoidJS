@@ -258,4 +258,302 @@ describe("Ball", () => {
       });
     });
   });
+
+  //-------------------------------------------------------------------------------------------------------------
+  //-------------------- TESTS PARTICIONES EQUIVALENTES, VALORES LÍMITE Y VALORES FRONTERA ----------------------
+  //-------------------------------------------------------------------------------------------------------------
+
+  describe("checkCollisionCanvasX", () => {
+    const canvasWidth = 400;
+  
+    describe("Particiones equivalentes", () => {
+      it("Debería detectar colisión con el borde izquierdo (partición válida)", () => {
+        ball.x = 0;
+        ball.speedX = -5; // Movimiento hacia la izquierda
+        ball.radius = 10;
+        expect(ball["checkCollisionCanvasX"](canvasWidth)).toBe(true);
+      });
+  
+      it("Debería detectar colisión con el borde derecho (partición válida)", () => {
+        ball.x = 400;
+        ball.speedX = 5; // Movimiento hacia la derecha
+        ball.radius = 10;
+        expect(ball["checkCollisionCanvasX"](canvasWidth)).toBe(true);
+      });
+  
+      it("No debería detectar colisión cuando la bola está completamente dentro del rango (partición válida)", () => {
+        ball.x = 200;
+        ball.speedX = 5; // Movimiento dentro del rango
+        ball.radius = 10;
+        expect(ball["checkCollisionCanvasX"](canvasWidth)).toBe(false);
+      });
+    });
+  
+    describe("Fronteras y límites", () => {
+      describe("Borde izquierdo", () => {
+
+        it("Debería detectar colisión en el límite inferior del borde izquierdo", () => {
+          ball.x = 13;
+          ball.speedX = -5; // Movimiento hacia la izquierda
+          ball.radius = 10;
+          expect(ball["checkCollisionCanvasX"](canvasWidth)).toBe(true);
+        });
+
+        it("Debería detectar colisión en la frontera del borde izquierdo", () => {
+          ball.x = 14; // 14 - 5 < 10
+          ball.speedX = -5; // Movimiento hacia la izquierda
+          ball.radius = 10;
+          expect(ball["checkCollisionCanvasX"](canvasWidth)).toBe(true);
+        });
+  
+        it("No debería detectar colisión en el límite superior del borde izquierdo", () => {
+          ball.x = 15;
+          ball.speedX = -5; // Movimiento hacia la izquierda
+          ball.radius = 10;
+          expect(ball["checkCollisionCanvasX"](canvasWidth)).toBe(false);
+        });
+      });
+  
+      describe("Borde derecho", () => {
+
+        it("Debería detectar colisión en el límite superior del borde derecho", () => {
+          ball.x = 387;
+          ball.speedX = 5; // Movimiento hacia la derecha
+          ball.radius = 10;
+          expect(ball["checkCollisionCanvasX"](canvasWidth)).toBe(true);
+        });
+
+        it("Debería detectar colisión en la frontera del borde derecho", () => {
+          ball.x = 386; // 386 + 5 > 400 - 10
+          ball.speedX = 5; // Movimiento hacia la derecha
+          ball.radius = 10;
+          expect(ball["checkCollisionCanvasX"](canvasWidth)).toBe(true);
+        });
+  
+        it("No debería detectar colisión en el límite inferior del borde derecho", () => {
+          ball.x = 385;
+          ball.speedX = 5; // Movimiento hacia la derecha
+          ball.radius = 10;
+          expect(ball["checkCollisionCanvasX"](canvasWidth)).toBe(false);
+        });
+      });
+    });
+  });
+
+  describe("checkCollisionCanvasY", () => {
+    const canvasHeight = 400;
+  
+    describe("Particiones equivalentes", () => {
+      it("Debería detectar colisión con el borde superior (partición válida)", () => {
+        ball.y = 0;
+        ball.speedY = -5; // Movimiento hacia arriba
+        ball.radius = 10;
+        expect(ball["checkCollisionCanvasY"](canvasHeight)).toBe(true);
+      });
+  
+      it("Debería detectar colisión con el borde inferior (partición válida)", () => {
+        ball.y = 400;
+        ball.speedY = 5; // Movimiento hacia abajo
+        ball.radius = 10;
+        expect(ball["checkCollisionCanvasY"](canvasHeight)).toBe(true);
+      });
+  
+      it("No debería detectar colisión cuando la bola está completamente dentro del rango (partición válida)", () => {
+        ball.y = 200;
+        ball.speedY = 5; // Movimiento dentro del rango
+        ball.radius = 10;
+        expect(ball["checkCollisionCanvasY"](canvasHeight)).toBe(false);
+      });
+    });
+  
+    describe("Fronteras y límites", () => {
+      describe("Borde superior", () => {
+        it("Debería detectar colisión en el límite inferior del borde superior", () => {
+          ball.y = 13;
+          ball.speedY = -5; // Movimiento hacia arriba
+          ball.radius = 10;
+          expect(ball["checkCollisionCanvasY"](canvasHeight)).toBe(true);
+        });
+  
+        it("Debería detectar colisión en la frontera del borde superior", () => {
+          ball.y = 14; // 14 - 5 < 10
+          ball.speedY = -5; // Movimiento hacia arriba
+          ball.radius = 10;
+          expect(ball["checkCollisionCanvasY"](canvasHeight)).toBe(true);
+        });
+  
+        it("No debería detectar colisión en el límite superior del borde superior", () => {
+          ball.y = 15;
+          ball.speedY = -5; // Movimiento hacia arriba
+          ball.radius = 10;
+          expect(ball["checkCollisionCanvasY"](canvasHeight)).toBe(false);
+        });
+      });
+  
+      describe("Borde inferior", () => {
+        it("Debería detectar colisión en el límite superior del borde inferior", () => {
+          ball.y = 387;
+          ball.speedY = 5; // Movimiento hacia abajo
+          ball.radius = 10;
+          expect(ball["checkCollisionCanvasY"](canvasHeight)).toBe(true);
+        });
+  
+        it("Debería detectar colisión en la frontera del borde inferior", () => {
+          ball.y = 386; // 386 + 5 > 400 - 10
+          ball.speedY = 5; // Movimiento hacia abajo
+          ball.radius = 10;
+          expect(ball["checkCollisionCanvasY"](canvasHeight)).toBe(true);
+        });
+  
+        it("No debería detectar colisión en el límite inferior del borde inferior", () => {
+          ball.y = 385;
+          ball.speedY = 5; // Movimiento hacia abajo
+          ball.radius = 10;
+          expect(ball["checkCollisionCanvasY"](canvasHeight)).toBe(false);
+        });
+      });
+    });
+  });
+
+  describe("checkCollisionPaddle", () => {
+    const paddleX = 50;
+    const paddleY = 350;
+    const paddleWidth = 100;
+    const paddleHeight = 10;
+  
+    describe("Particiones equivalentes", () => {
+      it("Debería detectar colisión cuando la bola está completamente dentro del área del paddle", () => {
+        ball.x = 75;
+        ball.y = 355;
+        ball.speedX = 0; // Sin movimiento
+        ball.speedY = 0;
+        expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(true);
+      });
+  
+      it("No debería detectar colisión cuando la bola está completamente fuera del área del paddle", () => {
+        ball.x = 200; // Mucho más allá del borde derecho del paddle
+        ball.y = 355;
+        ball.speedX = 0;
+        ball.speedY = 0;
+        expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(false);
+      });
+  
+      it("No debería detectar colisión cuando la bola está justo en los bordes pero no dentro", () => {
+        ball.x = 49; // Justo en el borde izquierdo pero fuera
+        ball.y = 355;
+        ball.speedX = 0;
+        ball.speedY = 0;
+        expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(false);
+      });
+    });
+  
+    describe("Fronteras y límites", () => {
+      describe("Borde derecho del paddle", () => {
+        it("Debería detectar colisión en la frontera del borde derecho", () => {
+          ball.x = 148; // 148 + 1 < 50 + 100 && 148 + 1 > 50
+          ball.speedX = 1; 
+          ball.y = 355;
+          ball.speedY = 0;
+          expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(true);
+        });
+  
+        it("Debería detectar colisión en el límite inferior del borde derecho", () => {
+          ball.x = 147; 
+          ball.speedX = 1; 
+          ball.y = 355;
+          ball.speedY = 0;
+          expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(true);
+        });
+  
+        it("No debería detectar colisión en el límite superior del borde derecho", () => {
+          ball.x = 149; 
+          ball.speedX = 1; 
+          ball.y = 355;
+          ball.speedY = 0;
+          expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(false);
+        });
+      });
+  
+      describe("Borde izquierdo del paddle", () => {
+        it("Debería detectar colisión en la frontera del borde izquierdo", () => {
+          ball.x = 50; // 50 + 1 < 50 + 100 && 50 + 1 > 50
+          ball.speedX = 1;
+          ball.y = 355;
+          ball.speedY = 0;
+          expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(true);
+        });
+  
+        it("No Debería detectar colisión en el límite inferior del borde izquierdo", () => {
+          ball.x = 49; 
+          ball.speedX = 1;
+          ball.y = 355;
+          ball.speedY = 0;
+          expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(false);
+        });
+  
+        it("Debería detectar colisión en el límite superior del borde izquierdo", () => {
+          ball.x = 51; 
+          ball.speedX = 1;
+          ball.y = 355;
+          ball.speedY = 0;
+          expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(true);
+        });
+      });
+  
+      describe("Borde superior del paddle", () => {
+        it("Debería detectar colisión en la frontera del borde superior", () => {
+          ball.y = 360; // 360 - 1 > 350 && 360 - 1 < 350 + 10
+          ball.speedY = -1; // Movimiento hacia arriba
+          ball.x = 148;
+          ball.speedX = 1;
+          expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(true);
+        });
+  
+        it("Debería detectar colisión en el límite inferior del borde superior", () => {
+          ball.y = 359; 
+          ball.speedY = -1; 
+          ball.x = 148;
+          ball.speedX = 1;
+          expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(true);
+        });
+  
+        it("No debería detectar colisión en el límite superior del borde superior", () => {
+          ball.y = 361; 
+          ball.speedY = -1; 
+          ball.x = 149;
+          ball.speedX = 1;
+          expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(false);
+        });
+      });
+  
+      describe("Borde inferior del paddle", () => {
+        it("Debería detectar colisión en la frontera del borde inferior", () => {
+          ball.y = 350; // 350 + 1 > 350 && 350 + 1 < 350 + 10
+          ball.speedY = 1;// Movimiento hacia abajo
+          ball.x = 148;
+          ball.speedX = 1;
+          expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(true);
+        });
+  
+        it("No Debería detectar colisión en el límite inferior del borde inferior", () => {
+          ball.y = 349; 
+          ball.speedY = 1;
+          ball.x = 149;
+          ball.speedX = 1;
+          expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(false);
+        });
+  
+        it("Debería detectar colisión en el límite superior del borde inferior", () => {
+          ball.y = 351; 
+          ball.speedY = 1;
+          ball.x = 148;
+          ball.speedX = 1;
+          expect(ball["checkCollisionPaddle"](paddleX, paddleY, paddleWidth, paddleHeight)).toBe(true);
+        });
+      });
+    });
+  });
+  
+  
 });
+

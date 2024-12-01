@@ -3,6 +3,7 @@ import { GameView } from "../../src/view/GameView";
 import { Ball } from "../../src/model/Ball";
 import { Paddle } from "../../src/model/Paddle";
 import { Map } from "../../src/model/Map";
+import { Brick } from "../../src/model/Brick";
 
 jest.mock("../../src/view/GameView");
 jest.mock("../../src/model/Ball");
@@ -695,6 +696,8 @@ describe("GameController", () => {
         initializeMap: jest.fn(),
         checkCollision: jest.fn(),
         selectLevel: jest.fn(),
+        getBricks: jest.fn(),
+        getBrickColumnCount: jest.fn(),
       } as unknown as jest.Mocked<Map>;
 
       controller = new GameController(mockView);
@@ -744,6 +747,59 @@ describe("GameController", () => {
 
       // Verificar que gameLoop se llama
       expect(controller["gameLoop"]).toHaveBeenCalled();
+    });
+  });
+
+  describe("mapCollision", () => {
+    let controller: GameController;
+    let mockView: jest.Mocked<GameView>;
+    let mockMap: jest.Mocked<Map>;
+    let mockBall: jest.Mocked<Ball>;
+    let mockBrick: jest.Mocked<Brick>;
+
+    beforeEach(() => {
+      mockView = {
+        updateScore: jest.fn(),
+      } as unknown as jest.Mocked<GameView>;
+
+      mockBall = {
+        x: 10,
+        y: 10,
+        changeY: jest.fn(),
+      } as unknown as jest.Mocked<Ball>;
+
+      mockBrick = {
+        isHit: jest.fn(() => true),
+        hit: jest.fn(),
+      } as unknown as jest.Mocked<Brick>;
+
+      mockMap = {
+        getBricks: jest.fn(() => [[mockBrick]]),
+        getBrickColumnCount: jest.fn(() => 1),
+        getBrickRowCount: jest.fn(() => 1),
+        getBrickWidth: jest.fn(() => 10),
+        getBrickHeigth: jest.fn(() => 10),
+      } as unknown as jest.Mocked<Map>;
+
+      controller = new GameController(mockView);
+      controller["map"] = mockMap;
+      controller["ball"] = mockBall;
+    });
+
+    it("debería actualizar la puntuación cuando un ladrillo es golpeado", () => {
+      controller["mapCollision"]();
+      expect(mockView.updateScore).toHaveBeenCalledWith(100);
+    });
+
+    it("debería llamar a hit en el ladrillo cuando la bola lo golpea", () => {
+      controller["mapCollision"]();
+      expect(mockBrick.hit).toHaveBeenCalled();
+    });
+
+    it("no debería actualizar la puntuación si la bola no golpea el ladrillo", () => {
+      mockBrick.isHit.mockReturnValueOnce(false); // Hacer que isHit devuelva false
+      controller["mapCollision"]();
+      expect(mockView.updateScore).not.toHaveBeenCalled();
     });
   });
 });

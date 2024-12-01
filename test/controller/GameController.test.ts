@@ -591,4 +591,61 @@ describe("GameController", () => {
       });
     });
   });
+
+  describe("ballMove", () => {
+    let controller: GameController;
+    let mockBall: jest.Mocked<Ball>;
+
+    beforeEach(() => {
+      mockBall = {
+        x: 0,
+        y: 0,
+        dx: 0,
+        dy: 0,
+        radius: 5,
+        move: jest.fn(),
+        checkCollision: jest.fn(),
+      } as unknown as jest.Mocked<Ball>;
+
+      controller = new GameController({} as GameView);
+      controller["ball"] = mockBall;
+    });
+
+    it("debería llamar a move de la bola", () => {
+      controller["ballMove"]();
+
+      expect(mockBall.move).toHaveBeenCalled();
+    });
+  });
+
+  describe("paddleMove", () => {
+    let controller: GameController;
+    let mockPaddle: jest.Mocked<Paddle>;
+
+    beforeEach(() => {
+      mockPaddle = {
+        paddleWidth: 75,
+        paddleHeight: 10,
+        paddleX: 0,
+        paddleY: 0,
+        canvasWidth: 448,
+        PADDLE_SENSITIVITY: 3,
+        collisionRight: false,
+        collisionLeft: false,
+        checkCollision: jest.fn(),
+        checkCollisionCanvasRight: jest.fn(),
+        checkCollisionCanvasLeft: jest.fn(),
+        move: jest.fn(),
+      } as unknown as jest.Mocked<Paddle>;
+
+      controller = new GameController({} as GameView);
+      controller["paddle"] = mockPaddle;
+    });
+
+    it("debería llamar a move del paddle", () => {
+      controller["paddleMove"]();
+
+      expect(mockPaddle.move).toHaveBeenCalled();
+    });
+  });
 });

@@ -44,7 +44,6 @@ class PaddleMock implements Paddle {
   }
 }
 
-
 describe("GameController", () => {
   let gameViewMock: jest.Mocked<GameView>;
   let BallMock: jest.Mocked<Ball>;
@@ -90,8 +89,6 @@ describe("GameController", () => {
       move: jest.fn(),
       checkCollision: jest.fn(),
     } as unknown as jest.Mocked<Ball>;
-
-    
 
     MapMock = {
       bricks: [],
@@ -194,7 +191,11 @@ describe("GameController", () => {
     let gameController: GameController;
 
     beforeEach(() => {
-      const mockView = {} as GameView;
+      const mockView = {
+        clearCanvas: jest.fn(),
+        render: jest.fn(),
+      } as unknown as GameView;
+
       gameController = new GameController(mockView);
     });
 
@@ -251,6 +252,7 @@ describe("GameController", () => {
       gameController = new GameController(mockView);
     });
 
+    // Condition coverage de keyUpHandler
     it("debería establecer rightPressed en false cuando se suelta 'ArrowRight'", () => {
       gameController["rightPressed"] = true; // Simulamos que estaba presionado
       const event = new KeyboardEvent("keyup", { key: "ArrowRight" });
@@ -293,7 +295,7 @@ describe("GameController", () => {
 
     it("no debería establecer leftPressed en false cuando no es 'ArrowLeft'", () => {
       gameController["leftPressed"] = true; // Simulamos que estaba presionado
-      const event = new KeyboardEvent("keyup", { key: "NotArrowLeft" });  //Forzamos que la key === ArrowLeft de false
+      const event = new KeyboardEvent("keyup", { key: "NotArrowLeft" }); //Forzamos que la key === ArrowLeft de false
       gameController["keyUpHandler"](event);
 
       expect(gameController["leftPressed"]).not.toBe(false);
@@ -428,6 +430,123 @@ describe("GameController", () => {
 
       // Verificar que se llamó a `mapCollision`
       expect(gameController["mapCollision"]).toHaveBeenCalled();
+    });
+  });
+
+  describe("gameLoop", () => {
+    let controller: GameController;
+    let mockView: any;
+    let mockBall: jest.Mocked<Ball>;
+    let mockPaddle: jest.Mocked<Paddle>;
+    let mockMap: jest.Mocked<Map>;
+
+    beforeEach(() => {
+      mockView = {
+        clearCanvas: jest.fn(),
+        render: jest.fn(),
+      };
+
+      mockBall = {
+        x: 0,
+        y: 0,
+        dx: 0,
+        dy: 0,
+        radius: 5,
+        move: jest.fn(),
+        checkCollision: jest.fn(),
+      } as unknown as jest.Mocked<Ball>;
+
+      mockMap = {
+        bricks: [],
+        initializeMap: jest.fn(),
+        checkCollision: jest.fn(),
+      } as unknown as jest.Mocked<Map>;
+
+      mockPaddle = {
+        paddleWidth: 75,
+        paddleHeight: 10,
+        paddleX: 0,
+        paddleY: 0,
+        canvasWidth: 448,
+        PADDLE_SENSITIVITY: 3,
+        collisionRight: false,
+        collisionLeft: false,
+        checkCollision: jest.fn(),
+        checkCollisionCanvasRight: jest.fn(),
+        checkCollisionCanvasLeft: jest.fn(),
+        move: jest.fn(),
+      } as unknown as jest.Mocked<Paddle>;
+
+      controller = new GameController(mockView);
+      controller["checkCollisions"] = jest.fn();
+      controller["ballMove"] = jest.fn();
+      controller["paddleMove"] = jest.fn();
+      controller["ball"] = mockBall;
+      controller["paddle"] = mockPaddle;
+      controller["map"] = mockMap;
+    });
+
+    it("debería llamar a clearCanvas cuando gameLoop es ejecutado", () => {
+      controller["isRunning"] = true;
+      controller["startGame"] = true;
+
+      controller["gameLoop"](); // Llamamos a la función
+
+      expect(mockView.clearCanvas).toHaveBeenCalled();
+    });
+
+    it("debería llamar a render con ball, paddle y map cuando gameLoop es ejecutado", () => {
+      controller["isRunning"] = true;
+      controller["startGame"] = true;
+
+      controller["gameLoop"](); // Llamamos a la función
+
+      expect(mockView.render).toHaveBeenCalledWith(
+        controller["ball"],
+        controller["paddle"],
+        controller["map"]
+      );
+    });
+
+    it("no debería llamar a clearCanvas ni render si startGame es false", () => {
+      controller["isRunning"] = true;
+      controller["startGame"] = false;
+
+      controller["gameLoop"](); // Llamamos a la función
+
+      expect(mockView.clearCanvas).not.toHaveBeenCalled();
+      expect(mockView.render).not.toHaveBeenCalled();
+    });
+
+    // PAIRWISE TESTING
+    describe("Pairwise Testing de gameLoop", () => {
+      const testCases = [
+        { startGame: true, isRunning: true },
+        { startGame: true, isRunning: false },
+        { startGame: false, isRunning: true },
+        { startGame: false, isRunning: false },
+      ];
+
+      testCases.forEach(({ startGame, isRunning }) => {
+        it(`debería manejar startGame=${startGame} y isRunning=${isRunning}`, () => {
+          controller["startGame"] = startGame;
+          controller["isRunning"] = isRunning;
+
+          controller["gameLoop"]();
+
+          if (startGame && isRunning) {
+            expect(mockView.clearCanvas).toHaveBeenCalled();
+            expect(mockView.render).toHaveBeenCalledWith(
+              controller["ball"],
+              controller["paddle"],
+              controller["map"]
+            );
+          } else {
+            expect(mockView.clearCanvas).not.toHaveBeenCalled();
+            expect(mockView.render).not.toHaveBeenCalled();
+          }
+        });
+      });
     });
   });
 });

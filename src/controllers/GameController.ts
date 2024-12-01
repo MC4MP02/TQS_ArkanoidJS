@@ -36,10 +36,21 @@ export class GameController {
     this.startGame = true;
 
     // Inicialización de la bola
-    this.ball = new Ball(0, 0, 0, 0, 0);
+    let ballX: number = this.canvasWidth / 2;
+    let ballY: number = this.canvasHeight - 40;
+    let ballRadius: number = 4;
+    let speedX: number = 1;
+    let speedY: number = -1;
+
+    this.ball = new Ball(ballX, ballY, ballRadius, speedX, speedY);
 
     // Inicialización de la paleta
-    this.paddle = new Paddle(0, 0, 0, 0);
+    let paddleWidth: number = 50;
+    let paddleHeight: number = 10;
+    let paddleX: number = (this.canvasWidth - paddleWidth) / 2;
+    let paddleY: number = this.canvasHeight - paddleHeight - 20;
+
+    this.paddle = new Paddle(paddleWidth, paddleHeight, paddleX, paddleY);
 
     // Inicialización del mapa
     this.map.selectLevel(1);
